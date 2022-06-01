@@ -1,6 +1,6 @@
-import 'package:client_backoffice/backoffice_page.dart';
-import 'package:client_backoffice/settings/git_integration_menu.dart';
-import 'package:client_backoffice/settings/manage_access_menu.dart';
+import 'package:client_backoffice/views/backoffice_page.dart';
+import 'package:client_backoffice/views/settings/git_integration_menu.dart';
+import 'package:client_backoffice/views/settings/manage_access_menu.dart';
 import 'package:client_common/api/response_models/build_response.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_text.dart';
@@ -26,7 +26,8 @@ class _SettingsPageState extends State<SettingsPage> {
       /* TODO: change onPressed function */
       mainActionWidget: LenraButton(
         text: "Publish my application",
-        disabled: builds?.any((build) => build.status == BuildStatus.pending) ?? true,
+        disabled:
+            builds?.any((build) => build.status == BuildStatus.pending) ?? true,
         onPressed: () {},
       ),
       child: LenraFlex(
@@ -63,7 +64,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget createSubMenuItem(String text, {Function()? callback}) {
     return LenraContainer(
-      decoration: BoxDecoration(color: currentContent == text ? LenraColorThemeData.lenraBlue : Colors.transparent),
+      decoration: BoxDecoration(
+          color: currentContent == text
+              ? LenraColorThemeData.lenraBlue
+              : Colors.transparent),
       child: InkWell(
         onTap: callback,
         hoverColor: LenraColorThemeData.lenraBlue,
@@ -79,7 +83,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: currentContent == text ? Colors.white : Colors.black,
               ),
             ),
-            Icon(Icons.navigate_next, color: currentContent == text ? Colors.white : Colors.black),
+            Icon(Icons.navigate_next,
+                color: currentContent == text ? Colors.white : Colors.black),
           ],
         ),
       ),

@@ -1,6 +1,6 @@
+import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_common/api/response_models/api_errors.dart';
 import 'package:client_common/models/auth_model.dart';
-import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/views/error_list.dart';
 import 'package:client_common/views/simple_page.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +23,17 @@ class _ActivationCodePageState extends State<ActivationCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    ApiErrors? validateDevErrors = context.select<AuthModel, ApiErrors?>((m) => m.validateDevStatus.errors);
-    bool hasError = context.select<AuthModel, bool>((m) => m.validateDevStatus.hasError());
-    bool isLoading = context.select<AuthModel, bool>((m) => m.validateDevStatus.isFetching());
+    ApiErrors? validateDevErrors = context
+        .select<AuthModel, ApiErrors?>((m) => m.validateDevStatus.errors);
+    bool hasError =
+        context.select<AuthModel, bool>((m) => m.validateDevStatus.hasError());
+    bool isLoading = context
+        .select<AuthModel, bool>((m) => m.validateDevStatus.isFetching());
 
     return SimplePage(
       title: "Thank you for your registration",
-      message: "Great things are about to happen! We will send you soon a token to access our developer platform.",
+      message:
+          "Great things are about to happen! We will send you soon a token to access our developer platform.",
       child: LenraFlex(
         direction: Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +91,7 @@ class _ActivationCodePageState extends State<ActivationCodePage> {
 
   void submit() {
     context.read<AuthModel>().validateDev(code).then((_) {
-      Navigator.of(context).pushReplacementNamed(CommonNavigator.welcome);
+      Navigator.of(context).pushReplacementNamed(BackofficeNavigator.welcome);
     }).catchError((error) {
       logger.warning(error);
     });

@@ -3,6 +3,8 @@ import 'package:client_backoffice/views/create_first_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
+import 'package:client_common/navigator/guard.dart';
+import 'package:client_common/navigator/page_guard.dart';
 import 'package:flutter/widgets.dart';
 
 typedef CustomPageBuilder = Widget Function(Map<String, String>);

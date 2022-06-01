@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:client_backoffice/backoffice_page.dart';
+import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:client_common/api/response_models/build_response.dart';
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/build_model.dart';
@@ -44,12 +43,14 @@ class _OverviewPageState extends State<OverviewPage> {
     // A bit dirty
     if (selectedApp == null) return Center(child: CircularProgressIndicator());
     List<BuildResponse> builds =
-        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(selectedApp.id));
+        context.select<BuildModel, List<BuildResponse>>(
+            (buildModel) => buildModel.buildsForApp(selectedApp.id));
 
     builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
 
     var hasPendingBuild =
-        builds.any((build) => build.status == BuildStatus.pending) || buildModel.createBuildStatus.isFetching();
+        builds.any((build) => build.status == BuildStatus.pending) ||
+            buildModel.createBuildStatus.isFetching();
 
     if (hasPendingBuild) {
       timer = Timer(Duration(seconds: 5), () {
@@ -57,7 +58,8 @@ class _OverviewPageState extends State<OverviewPage> {
       });
     }
 
-    var hasPublishedBuild = builds.any((build) => build.status == BuildStatus.success);
+    var hasPublishedBuild =
+        builds.any((build) => build.status == BuildStatus.success);
 
     return BackofficePage(
       title: Text("Overview"),
@@ -78,7 +80,8 @@ class _OverviewPageState extends State<OverviewPage> {
                 text: "See my application",
                 type: LenraComponentType.secondary,
                 onPressed: () async {
-                  final url = "${Config.instance.appBaseUrl}${selectedApp.serviceName}";
+                  final url =
+                      "${Config.instance.appBaseUrl}${selectedApp.serviceName}";
                   if (await canLaunchUrl(Uri.parse(url))) {
                     await launchUrl(Uri.parse(url));
                   } else {
@@ -102,7 +105,8 @@ class _OverviewPageState extends State<OverviewPage> {
                 ),
               ]),
               if (builds.isNotEmpty) buildRow(context, builds.last),
-              if (builds.length >= 2 && builds.last.status == BuildStatus.pending)
+              if (builds.length >= 2 &&
+                  builds.last.status == BuildStatus.pending)
                 buildRow(context, builds.reversed.elementAt(1)),
             ],
           ),
@@ -156,7 +160,8 @@ class _OverviewPageState extends State<OverviewPage> {
         child: Text("#${buildResponse.buildNumber}"),
       ),
       LenraTableCell(
-        child: Text(DateFormat.yMMMMd().add_jm().format(buildResponse.insertedAt)),
+        child:
+            Text(DateFormat.yMMMMd().add_jm().format(buildResponse.insertedAt)),
       ),
       LenraTableCell(
         child: LenraFlex(
