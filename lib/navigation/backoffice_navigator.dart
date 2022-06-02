@@ -1,3 +1,4 @@
+import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/activation_code_page.dart';
 import 'package:client_backoffice/views/create_first_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
@@ -50,7 +51,7 @@ class BackofficeNavigator {
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
             Guard.checkIsDev,
-            Guard.checkHaveApp,
+            BackofficeGuard.checkHaveApp,
           ],
           child: OverviewPage(),
         ),
@@ -59,7 +60,7 @@ class BackofficeNavigator {
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
             Guard.checkIsDev,
-            Guard.checkHaveApp,
+            BackofficeGuard.checkHaveApp,
           ],
           child: SettingsPage(),
         ),
