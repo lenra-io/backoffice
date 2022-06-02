@@ -26,8 +26,7 @@ class _SettingsPageState extends State<SettingsPage> {
       /* TODO: change onPressed function */
       mainActionWidget: LenraButton(
         text: "Publish my application",
-        disabled:
-            builds?.any((build) => build.status == BuildStatus.pending) ?? true,
+        disabled: builds?.any((build) => build.status == BuildStatus.pending) ?? true,
         onPressed: () {},
       ),
       child: LenraFlex(
@@ -64,10 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget createSubMenuItem(String text, {Function()? callback}) {
     return LenraContainer(
-      decoration: BoxDecoration(
-          color: currentContent == text
-              ? LenraColorThemeData.lenraBlue
-              : Colors.transparent),
+      decoration: BoxDecoration(color: currentContent == text ? LenraColorThemeData.lenraBlue : Colors.transparent),
       child: InkWell(
         onTap: callback,
         hoverColor: LenraColorThemeData.lenraBlue,
@@ -83,8 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: currentContent == text ? Colors.white : Colors.black,
               ),
             ),
-            Icon(Icons.navigate_next,
-                color: currentContent == text ? Colors.white : Colors.black),
+            Icon(Icons.navigate_next, color: currentContent == text ? Colors.white : Colors.black),
           ],
         ),
       ),
