@@ -43,7 +43,7 @@ class BackofficeTopBar extends StatelessWidget {
         style: theme.lenraTextThemeData.bodyText.merge(theme.lenraTextThemeData.headline2),
         softWrap: false,
         overflow: TextOverflow.ellipsis,
-        child: this.title,
+        child: title,
       ),
     );
   }

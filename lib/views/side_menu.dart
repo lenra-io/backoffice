@@ -83,8 +83,8 @@ class BackofficeSideMenu extends StatelessWidget {
                 icon: Icons.messenger_outline_rounded,
                 onPressed: () async {
                   const url = "mailto:contact@lenra.io";
-                  if (await canLaunch(url)) {
-                    await launch(url);
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
                   } else {
                     throw "Could not launch $url";
                   }
