@@ -23,17 +23,13 @@ class _ActivationCodePageState extends State<ActivationCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    ApiErrors? validateDevErrors = context
-        .select<AuthModel, ApiErrors?>((m) => m.validateDevStatus.errors);
-    bool hasError =
-        context.select<AuthModel, bool>((m) => m.validateDevStatus.hasError());
-    bool isLoading = context
-        .select<AuthModel, bool>((m) => m.validateDevStatus.isFetching());
+    ApiErrors? validateDevErrors = context.select<AuthModel, ApiErrors?>((m) => m.validateDevStatus.errors);
+    bool hasError = context.select<AuthModel, bool>((m) => m.validateDevStatus.hasError());
+    bool isLoading = context.select<AuthModel, bool>((m) => m.validateDevStatus.isFetching());
 
     return SimplePage(
       title: "Thank you for your registration",
-      message:
-          "Great things are about to happen! We will send you soon a token to access our developer platform.",
+      message: "Great things are about to happen! We will send you soon a token to access our developer platform.",
       child: LenraFlex(
         direction: Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.center,

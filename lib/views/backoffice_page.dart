@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lenra_components/lenra_components.dart';
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
-_BackofficeBurgerMenuManagerState _burgerMenuState =
-    _BackofficeBurgerMenuManagerState();
+_BackofficeBurgerMenuManagerState _burgerMenuState = _BackofficeBurgerMenuManagerState();
 
 class BackofficePage extends StatelessWidget {
   final Widget child;
@@ -88,8 +87,7 @@ class _BackofficeBurgerMenuManager extends StatefulWidget {
   }
 }
 
-class _BackofficeBurgerMenuManagerState
-    extends State<_BackofficeBurgerMenuManager> {
+class _BackofficeBurgerMenuManagerState extends State<_BackofficeBurgerMenuManager> {
   @override
   Widget build(BuildContext context) {
     var theme = LenraTheme.of(context);

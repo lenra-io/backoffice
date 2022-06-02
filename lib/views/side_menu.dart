@@ -71,8 +71,7 @@ class BackofficeSideMenu extends StatelessWidget {
                 icon: Icons.logout,
                 onPressed: () {
                   context.read<AuthModel>().logout().then((value) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(CommonNavigator.loginRoute);
+                    Navigator.of(context).pushReplacementNamed(CommonNavigator.loginRoute);
                   }).catchError((error) {
                     logger.warning(error);
                   });
@@ -114,10 +113,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<UserApplicationModel>()
-          .fetchUserApplications()
-          .then((value) {
+      context.read<UserApplicationModel>().fetchUserApplications().then((value) {
         selectedApp = context.read<UserApplicationModel>().selectedApp;
         context.read<UserApplicationModel>().getMainEnv(selectedApp!.id);
         isInitialized = true;
@@ -128,8 +124,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
 
   @override
   Widget build(BuildContext context) {
-    mainEnv = context
-        .select<UserApplicationModel, EnvironmentResponse?>((m) => m.mainEnv);
+    mainEnv = context.select<UserApplicationModel, EnvironmentResponse?>((m) => m.mainEnv);
 
     var theme = LenraTheme.of(context);
     if (selectedApp == null) return SizedBox.shrink();
@@ -168,9 +163,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
                     )
                   ],
                 )
-              : LenraFlex(
-                  children: [CircularProgressIndicator()],
-                  mainAxisAlignment: MainAxisAlignment.center)),
+              : LenraFlex(children: [CircularProgressIndicator()], mainAxisAlignment: MainAxisAlignment.center)),
       BackofficeSideMenuRoute(
         "Overview",
         icon: Icons.bookmark_border_rounded,
@@ -217,13 +210,10 @@ class BackofficeSideMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = LenraTheme.of(context);
-    var color = disabled
-        ? theme.lenraTextThemeData.disabledBodyText.color
-        : theme.lenraTextThemeData.bodyText.color;
+    var color = disabled ? theme.lenraTextThemeData.disabledBodyText.color : theme.lenraTextThemeData.bodyText.color;
     var ret = Container(
       color: selected ? LenraColorThemeData.lenraBlue : Colors.transparent,
-      padding: EdgeInsets.symmetric(
-          horizontal: theme.baseSize * 2, vertical: theme.baseSize),
+      padding: EdgeInsets.symmetric(horizontal: theme.baseSize * 2, vertical: theme.baseSize),
       width: double.infinity,
       child: Row(children: [
         Container(
@@ -277,9 +267,7 @@ class BackofficeSideMenuRoute extends StatelessWidget {
       icon: icon,
       disabled: disabled,
       selected: isCurrent,
-      onPressed: (!disabled && !isCurrent)
-          ? () => Navigator.of(context).pushNamed(route)
-          : null,
+      onPressed: (!disabled && !isCurrent) ? () => Navigator.of(context).pushNamed(route) : null,
     );
   }
 }
