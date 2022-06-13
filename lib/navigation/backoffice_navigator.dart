@@ -111,7 +111,7 @@ class BackofficeNavigator extends CommonNavigator {
     Widget? page = _getFirstMatchingPage(settings.name!);
     if (page == null) return Page404.pageRoutebuilder(settings);
     return PageRouteBuilder(
-      pageBuilder: (BuildContext context, _a, _b) {
+      pageBuilder: (BuildContext context, a, b) {
         return page;
       },
       settings: settings,
