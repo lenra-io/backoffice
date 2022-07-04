@@ -1,6 +1,6 @@
 import 'package:client_common/api/request_models/create_environment_user_access_request.dart';
 import 'package:client_common/api/request_models/update_environment_request.dart';
-import 'package:client_common/api/response_models/api_errors.dart';
+import 'package:client_common/api/response_models/api_error.dart';
 import 'package:client_common/lenra_application/api_error_snack_bar.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
                         },
                       ).catchError((error) {
                         ScaffoldMessenger.of(context).showSnackBar(ApiErrorSnackBar(
-                          errors: error,
+                          error: error,
                           actionLabel: 'Close',
                           onPressAction: () {},
                         ));
@@ -169,9 +169,9 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
     }
   }
 
-  void logError(ApiErrors error) {
+  void logError(ApiError error) {
     ScaffoldMessenger.of(context).showSnackBar(ApiErrorSnackBar(
-      errors: error,
+      error: error,
       actionLabel: 'Close',
       onPressAction: () {},
     ));

@@ -163,7 +163,7 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
             isLoading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(ApiErrorSnackBar(
-            errors: error,
+            error: error,
             actionLabel: 'Close',
             onPressAction: () {},
           ));
