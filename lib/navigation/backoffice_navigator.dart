@@ -37,6 +37,7 @@ class BackofficeNavigator extends CommonNavigator {
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
+            Guard.checkIsUser,
             Guard.checkIsDev,
             Guard.checkNotHaveApp,
           ],
@@ -46,6 +47,7 @@ class BackofficeNavigator extends CommonNavigator {
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
+            Guard.checkIsUser,
             Guard.checkIsDev,
             Guard.checkNotHaveApp,
           ],
@@ -55,6 +57,7 @@ class BackofficeNavigator extends CommonNavigator {
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
+            Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
           ],
@@ -64,6 +67,7 @@ class BackofficeNavigator extends CommonNavigator {
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
+            Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
           ],
