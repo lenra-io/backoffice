@@ -58,7 +58,7 @@ class BackofficeSideMenu extends StatelessWidget {
                 "Documentation",
                 icon: Icons.book_outlined,
                 onPressed: () async {
-                  const url = "https://doc.lenra.io";
+                  const url = "https://docs.lenra.io";
                   if (await canLaunchUrl(Uri.parse(url))) {
                     await launchUrl(Uri.parse(url));
                   } else {
