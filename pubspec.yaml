@@ -19,11 +19,11 @@ dependencies:
   lenra_components:
     git:
       url: git@github.com:lenra-io/lenra_components.git
-      ref: v1.0.0-beta.45
+      ref: v1.0.0-beta.46
   client_common:
     git:
       url: git@github.com:lenra-io/client-common.git
-      ref: v1.0.0-beta.4
+      ref: v1.0.0-beta.8
   url_launcher: ^6.1.2
   intl: ^0.17.0
   logging: ^1.0.2
