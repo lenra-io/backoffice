@@ -55,7 +55,7 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
 
     return isInitialized
         ? LenraFlex(
-            spacing: 1,
+            spacing: 8,
             direction: Axis.vertical,
             children: [
               Text("Manage access", style: lenraTextThemeData.headline3),
@@ -106,7 +106,7 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
               ),
               ...invitedUsers.map((user) {
                 return LenraFlex(
-                  spacing: 1,
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

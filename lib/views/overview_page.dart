@@ -68,7 +68,7 @@ class _OverviewPageState extends State<OverviewPage> {
       ),
       child: LenraFlex(
         direction: Axis.vertical,
-        spacing: 2,
+        spacing: 16,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -161,7 +161,7 @@ class _OverviewPageState extends State<OverviewPage> {
       LenraTableCell(
         child: LenraFlex(
           crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 1,
+          spacing: 8,
           children: [
             Icon(
               Icons.circle,

@@ -138,7 +138,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
           child: isInitialized
               ? LenraFlex(
                   direction: Axis.vertical,
-                  spacing: 0.5,
+                  spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -147,7 +147,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
                     ),
                     LenraFlex(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 1,
+                      spacing: 8,
                       children: [
                         Icon(
                           Icons.circle,

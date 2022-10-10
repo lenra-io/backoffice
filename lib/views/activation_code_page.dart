@@ -33,14 +33,14 @@ class _ActivationCodePageState extends State<ActivationCodePage> {
       child: LenraFlex(
         direction: Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 4,
+        spacing: 32,
         children: [
           LenraFlex(
             direction: Axis.vertical,
-            spacing: 2,
+            spacing: 16,
             children: [
               LenraFlex(
-                spacing: 2,
+                spacing: 16,
                 fillParent: true,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

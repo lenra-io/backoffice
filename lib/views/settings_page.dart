@@ -30,12 +30,12 @@ class _SettingsPageState extends State<SettingsPage> {
         onPressed: () {},
       ),
       child: LenraFlex(
-        spacing: 2,
+        spacing: 16,
         children: [
           LenraContainer(
             constraints: BoxConstraints(maxWidth: 200),
             child: LenraFlex(
-              spacing: 2,
+              spacing: 16,
               direction: Axis.vertical,
               children: [
                 createSubMenuItem("Git integration", callback: () {
