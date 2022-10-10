@@ -43,7 +43,7 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
       key: _formKey,
       child: LenraFlex(
         direction: Axis.vertical,
-        spacing: 1,
+        spacing: 8,
         children: [
           LenraText(
             text: "Git integration",
@@ -62,7 +62,7 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
                 style: lenraTextThemeData.bodyText,
               ),
               LenraFlex(
-                spacing: 1,
+                spacing: 8,
                 children: [
                   Expanded(
                     child: LenraTextFormField(
@@ -97,7 +97,7 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
                 style: lenraTextThemeData.bodyText,
               ),
               LenraFlex(
-                spacing: 1,
+                spacing: 8,
                 children: [
                   Expanded(
                     child: LenraTextFormField(

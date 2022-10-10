@@ -28,7 +28,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
       key: _formKey,
       child: LenraFlex(
         direction: Axis.vertical,
-        spacing: 4,
+        spacing: 32,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           fields(context),
@@ -47,7 +47,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
   Widget fields(BuildContext context) {
     return LenraFlex(
       direction: Axis.vertical,
-      spacing: 2,
+      spacing: 16,
       children: [
         LenraTextFormField(
           validator: validator([
