@@ -2,7 +2,7 @@ import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/api/response_models/build_response.dart';
-import 'package:client_common/api/response_models/get_main_env_response.dart';
+import 'package:client_common/models/build_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_status_sticker.dart';
@@ -58,8 +58,11 @@ class _SelectProjectPageState extends State<SelectProjectPage> {
     var theme = LenraTheme.of(context);
 
     return FutureBuilder(
-      future: context.read<UserApplicationModel>().getMainEnv(app.id),
-      builder: (BuildContext context, AsyncSnapshot<GetMainEnvResponse> snapshot) {
+      future: Future.wait([
+        context.read<UserApplicationModel>().getMainEnv(app.id),
+        context.read<BuildModel>().fetchBuilds(app.id),
+      ]),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasData) {
           return InkWell(
             onTap: () {
@@ -86,9 +89,7 @@ class _SelectProjectPageState extends State<SelectProjectPage> {
                     children: [
                       LenraStatusSticker(
                           color: colorFromStatus(BuildStatus.success)), // TODO: Get real status from the app
-                      Text(snapshot.data!.mainEnv.isPublic
-                          ? "Public"
-                          : "Private"), // TODO: Get real visibility from the app
+                      Text(snapshot.data[0]!.mainEnv.isPublic ? "Public" : "Private"),
                     ],
                   ),
                 ],
