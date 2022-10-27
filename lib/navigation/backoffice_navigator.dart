@@ -2,6 +2,7 @@ import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/activation_code_page.dart';
 import 'package:client_backoffice/views/create_first_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
+import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
 import 'package:client_common/navigator/common_navigator.dart';

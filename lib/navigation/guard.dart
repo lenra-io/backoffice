@@ -11,6 +11,8 @@ class BackofficeGuard extends Guard {
   BackofficeGuard({required super.isValid, required super.onInvalid});
 
   static final BackofficeGuard checkHaveApp = BackofficeGuard(isValid: _haveApp(true), onInvalid: _toWelcome);
+  static final BackofficeGuard checkHasSelectedApp =
+      BackofficeGuard(isValid: _hasSelectedApp(), onInvalid: _toSelectApp);
 
   static Future<bool> Function(BuildContext) _haveApp(bool mustHaveApp) {
     return (BuildContext context) async {
@@ -21,6 +23,21 @@ class BackofficeGuard extends Guard {
         return false;
       }
     };
+  }
+
+  static Future<bool> Function(BuildContext) _hasSelectedApp() {
+    return (BuildContext context) {
+      return Future.delayed(
+        const Duration(),
+        () {
+          return context.read<UserApplicationModel>().currentApp == null ? false : true;
+        },
+      );
+    };
+  }
+
+  static void _toSelectApp(context) {
+    Navigator.of(context).pushNamed(BackofficeNavigator.selectProject);
   }
 
   static void _toWelcome(context) {
