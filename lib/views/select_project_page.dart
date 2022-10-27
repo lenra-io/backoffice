@@ -30,7 +30,7 @@ class _SelectProjectPageState extends State<SelectProjectPage> {
       title: Text("Project selection"),
       mainActionWidget: LenraButton(
         text: "Create a new project",
-        onPressed: () => null, // TODO: Open create new project page
+        onPressed: () => Navigator.of(context).pushNamed(BackofficeNavigator.createProject),
       ),
       child: LenraFlex(
         direction: Axis.vertical,

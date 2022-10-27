@@ -30,7 +30,7 @@ class BackofficeGuard extends Guard {
       return Future.delayed(
         const Duration(),
         () {
-          return context.read<UserApplicationModel>().currentApp == null ? false : true;
+          return context.read<UserApplicationModel>().selectedApp == null ? false : true;
         },
       );
     };

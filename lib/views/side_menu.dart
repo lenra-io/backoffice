@@ -141,6 +141,12 @@ class _ProjectMenuState extends State<_ProjectMenu> {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    LenraButton(
+                        text: "Switch to another project",
+                        onPressed: () {
+                          context.read<UserApplicationModel>().selectedApp = null;
+                          Navigator.of(context).pushNamed(BackofficeNavigator.selectProject);
+                        }),
                     Text(
                       selectedApp!.name,
                       style: theme.lenraTextThemeData.headline2,

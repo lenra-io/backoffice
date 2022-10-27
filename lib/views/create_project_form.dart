@@ -33,7 +33,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
         children: [
           fields(context),
           LoadingButton(
-            text: "Create my first project",
+            text: "Create my project",
             loading: isLoading,
             onPressed: () {
               submit();
@@ -87,7 +87,8 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
 
   void submit() {
     if (_formKey.currentState!.validate()) {
-      context.read<UserApplicationModel>().createApp(projectName, gitRepository).then((_) {
+      context.read<UserApplicationModel>().createApp(projectName, gitRepository).then((app) {
+        context.read<UserApplicationModel>().selectedApp = app;
         Navigator.of(context).pushNamed(BackofficeNavigator.homeRoute);
       }).catchError((error) {
         logger.warning(error);
