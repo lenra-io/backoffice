@@ -15,6 +15,7 @@ class BackofficeNavigator extends CommonNavigator {
   static const String validationDevRoute = "/validation-dev";
   static const String welcome = "/welcome";
   static const String firstProject = "/first-project";
+  static const String selectProject = "/select-project";
   static const String settings = "/settings";
 
   static String? currentRoute;
@@ -53,6 +54,16 @@ class BackofficeNavigator extends CommonNavigator {
           ],
           child: CreateFirstProjectPage(),
         ),
+    selectProject: (Map<String, String> params) => PageGuard(
+          guards: [
+            Guard.checkAuthenticated,
+            Guard.checkCguAccepted,
+            Guard.checkIsUser,
+            Guard.checkIsDev,
+            BackofficeGuard.checkHaveApp,
+          ],
+          child: SelectProjectPage(),
+        ),
     homeRoute: (Map<String, String> params) => PageGuard(
           guards: [
             Guard.checkAuthenticated,
@@ -60,6 +71,7 @@ class BackofficeNavigator extends CommonNavigator {
             Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
+            BackofficeGuard.checkHasSelectedApp,
           ],
           child: OverviewPage(),
         ),
@@ -70,6 +82,7 @@ class BackofficeNavigator extends CommonNavigator {
             Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
+            BackofficeGuard.checkHasSelectedApp,
           ],
           child: SettingsPage(),
         ),
