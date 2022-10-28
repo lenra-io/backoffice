@@ -77,20 +77,48 @@ class _SelectProjectPageState extends State<SelectProjectPage> {
               child: LenraFlex(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 28),
                 spacing: 16,
+                fillParent: true,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    app.name,
-                    style: theme.lenraTextThemeData.headline3,
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: LenraFlex(
+                      spacing: 16,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          app.name,
+                          style: theme.lenraTextThemeData.headline3,
+                        ),
+                        LenraFlex(
+                          spacing: 8,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            LenraStatusSticker(
+                                color: colorFromStatus(BuildStatus.success)), // TODO: Get real status from the app
+                            Text(snapshot.data[0]!.mainEnv.isPublic ? "Public" : "Private"),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  LenraFlex(
-                    spacing: 8,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      LenraStatusSticker(
-                          color: colorFromStatus(BuildStatus.success)), // TODO: Get real status from the app
-                      Text(snapshot.data[0]!.mainEnv.isPublic ? "Public" : "Private"),
-                    ],
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: LenraFlex(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Last update: ",
+                          style: theme.lenraTextThemeData.subtext,
+                        ), // TODO: Get date from app
+                        LenraButton(
+                          type: LenraComponentType.tertiary,
+                          leftIcon: Icon(Icons.more_horiz),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
