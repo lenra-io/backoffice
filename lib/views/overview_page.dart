@@ -48,8 +48,8 @@ class _OverviewPageState extends State<OverviewPage> {
 
     builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
 
-    var hasPendingBuild =
-        builds.any((build) => build.status == BuildStatus.pending) || buildModel.createBuildStatus.isFetching();
+    var hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending) ||
+        buildModel.createBuildStatus[selectedApp.id]!.isFetching();
 
     if (hasPendingBuild) {
       timer = Timer(Duration(seconds: 5), () {
