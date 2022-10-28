@@ -115,7 +115,10 @@ class _ProjectMenuState extends State<_ProjectMenu> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<UserApplicationModel>().fetchUserApplications().then((value) {
         selectedApp = context.read<UserApplicationModel>().selectedApp;
-        context.read<UserApplicationModel>().getMainEnv(selectedApp!.id);
+
+        if (selectedApp != null) {
+          context.read<UserApplicationModel>().getMainEnv(selectedApp!.id);
+        }
         isInitialized = true;
       });
     });
