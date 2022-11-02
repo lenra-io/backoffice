@@ -46,18 +46,23 @@ class _OverviewPageState extends State<OverviewPage> {
     List<BuildResponse> builds =
         context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(selectedApp.id));
 
-    builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
+    var hasPendingBuild = false;
+    var hasPublishedBuild = false;
 
-    var hasPendingBuild =
-        builds.any((build) => build.status == BuildStatus.pending) || buildModel.createBuildStatus.isFetching();
+    if (builds.isNotEmpty) {
+      builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
 
-    if (hasPendingBuild) {
-      timer = Timer(Duration(seconds: 5), () {
-        setState(() {});
-      });
+      hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending) ||
+          buildModel.createBuildStatus[selectedApp.id]!.isFetching();
+
+      if (hasPendingBuild) {
+        timer = Timer(Duration(seconds: 5), () {
+          setState(() {});
+        });
+      }
+
+      hasPublishedBuild = builds.any((build) => build.status == BuildStatus.success);
     }
-
-    var hasPublishedBuild = builds.any((build) => build.status == BuildStatus.success);
 
     return BackofficePage(
       title: Text("Overview"),
