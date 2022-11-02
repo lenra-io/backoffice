@@ -55,7 +55,7 @@ packages:
     description:
       path: "."
       ref: change-selected-app
-      resolved-ref: "87f624238f4c63b35aa5faca63c3c03ad6938840"
+      resolved-ref: "7294d1a8f5b7442808152754272439275c8a7c24"
       url: "git@github.com:lenra-io/client-common.git"
     source: git
     version: "1.0.0"
