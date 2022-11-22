@@ -1,6 +1,5 @@
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/activation_code_page.dart';
-import 'package:client_backoffice/views/create_first_project_page.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/select_project_page.dart';
@@ -16,7 +15,6 @@ class BackofficeNavigator extends CommonNavigator {
   static const String homeRoute = "/";
   static const String validationDevRoute = "/validation-dev";
   static const String welcome = "/welcome";
-  static const String firstProject = "/first-project";
   static const String createProject = "/create-project";
   static const String selectProject = "/select-project";
   static const String settings = "/settings";
@@ -46,16 +44,6 @@ class BackofficeNavigator extends CommonNavigator {
             Guard.checkNotHaveApp,
           ],
           child: WelcomeDevPage(),
-        ),
-    firstProject: (Map<String, String> params) => PageGuard(
-          guards: [
-            Guard.checkAuthenticated,
-            Guard.checkCguAccepted,
-            Guard.checkIsUser,
-            Guard.checkIsDev,
-            Guard.checkNotHaveApp,
-          ],
-          child: CreateFirstProjectPage(),
         ),
     createProject: (Map<String, String> params) => PageGuard(
           guards: [
