@@ -57,7 +57,6 @@ class _ProjectRowState extends State<_ProjectRow> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       mainEnv = await context.read<UserApplicationModel>().getMainEnv(widget.app.id);
-      print("GET MAIN ENV appid:${widget.app.id} mainEnvId:${mainEnv?.mainEnv.id}");
       await context.read<BuildModel>().fetchBuilds(widget.app.id);
       setState(() {
         isInitialized = true;
