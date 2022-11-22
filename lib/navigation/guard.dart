@@ -27,12 +27,7 @@ class BackofficeGuard extends Guard {
 
   static Future<bool> Function(BuildContext) _hasSelectedApp() {
     return (BuildContext context) {
-      return Future.delayed(
-        const Duration(),
-        () {
-          return context.read<UserApplicationModel>().selectedApp == null ? false : true;
-        },
-      );
+      return Future<bool>.value(context.read<UserApplicationModel>().selectedApp == null ? false : true);
     };
   }
 
