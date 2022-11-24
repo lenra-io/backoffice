@@ -79,15 +79,24 @@
         ],
         child: WelcomeDevPage(),
       ),
-  firstProject: (Map&lt;String, String&gt; params) =&gt; PageGuard(
+  createProject: (Map&lt;String, String&gt; params) =&gt; PageGuard(
         guards: [
           Guard.checkAuthenticated,
           Guard.checkCguAccepted,
           Guard.checkIsUser,
           Guard.checkIsDev,
-          Guard.checkNotHaveApp,
         ],
-        child: CreateFirstProjectPage(),
+        child: CreateProjectPage(),
+      ),
+  selectProject: (Map&lt;String, String&gt; params) =&gt; PageGuard(
+        guards: [
+          Guard.checkAuthenticated,
+          Guard.checkCguAccepted,
+          Guard.checkIsUser,
+          Guard.checkIsDev,
+          BackofficeGuard.checkHaveApp,
+        ],
+        child: SelectProjectPage(),
       ),
   homeRoute: (Map&lt;String, String&gt; params) =&gt; PageGuard(
         guards: [
@@ -96,6 +105,7 @@
           Guard.checkIsUser,
           Guard.checkIsDev,
           BackofficeGuard.checkHaveApp,
+          BackofficeGuard.checkHasSelectedApp,
         ],
         child: OverviewPage(),
       ),
@@ -106,6 +116,7 @@
           Guard.checkIsUser,
           Guard.checkIsDev,
           BackofficeGuard.checkHaveApp,
+          BackofficeGuard.checkHasSelectedApp,
         ],
         child: SettingsPage(),
       ),
@@ -163,8 +174,9 @@
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/handleGenerateRoute.html">handleGenerateRoute</a></li>
 
         <li class="section-title"><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator-class.html#constants">Constants</a></li>
-          <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/firstProject-constant.html">firstProject</a></li>
+          <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject-constant.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/homeRoute-constant.html">homeRoute</a></li>
+          <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject-constant.html">selectProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/settings-constant.html">settings</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/validationDevRoute-constant.html">validationDevRoute</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/welcome-constant.html">welcome</a></li>
