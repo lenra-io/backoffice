@@ -115,7 +115,10 @@ class _ProjectMenuState extends State<_ProjectMenu> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<UserApplicationModel>().fetchUserApplications().then((value) {
         selectedApp = context.read<UserApplicationModel>().selectedApp;
-        context.read<UserApplicationModel>().getMainEnv(selectedApp!.id);
+
+        if (selectedApp != null) {
+          context.read<UserApplicationModel>().getMainEnv(selectedApp!.id);
+        }
         isInitialized = true;
       });
     });
@@ -141,6 +144,24 @@ class _ProjectMenuState extends State<_ProjectMenu> {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    InkWell(
+                      child: LenraFlex(
+                        children: [
+                          Icon(
+                            Icons.chevron_left_rounded,
+                            color: LenraColorThemeData.lenraBlue,
+                          ),
+                          Text(
+                            "Projects",
+                            style: theme.lenraTextThemeData.blueBodyText,
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        context.read<UserApplicationModel>().selectedApp = null;
+                        Navigator.of(context).pushNamed(BackofficeNavigator.selectProject);
+                      },
+                    ),
                     Text(
                       selectedApp!.name,
                       style: theme.lenraTextThemeData.headline2,

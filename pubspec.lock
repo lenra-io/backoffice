@@ -54,8 +54,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v1.0.0-beta.17"
-      resolved-ref: "2f4b89a9fe81673da04494842747c60129502d17"
+      ref: "v1.0.0-beta.19"
+      resolved-ref: "4af0e7312456866cee66f7ffc608f893c79d056f"
       url: "git@github.com:lenra-io/client-common.git"
     source: git
     version: "1.0.0"

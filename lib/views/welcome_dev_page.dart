@@ -16,7 +16,7 @@ class WelcomeDevPage extends StatelessWidget {
       message: welcomeText,
       child: LenraButton(
         text: buttonText,
-        onPressed: () => Navigator.of(context).pushReplacementNamed(BackofficeNavigator.firstProject),
+        onPressed: () => Navigator.of(context).pushReplacementNamed(BackofficeNavigator.createProject),
       ),
     );
   }

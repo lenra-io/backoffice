@@ -1,7 +1,8 @@
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/activation_code_page.dart';
-import 'package:client_backoffice/views/create_first_project_page.dart';
+import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
+import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
 import 'package:client_common/navigator/common_navigator.dart';
@@ -14,7 +15,8 @@ class BackofficeNavigator extends CommonNavigator {
   static const String homeRoute = "/";
   static const String validationDevRoute = "/validation-dev";
   static const String welcome = "/welcome";
-  static const String firstProject = "/first-project";
+  static const String createProject = "/create-project";
+  static const String selectProject = "/select-project";
   static const String settings = "/settings";
 
   static String? currentRoute;
@@ -43,15 +45,24 @@ class BackofficeNavigator extends CommonNavigator {
           ],
           child: WelcomeDevPage(),
         ),
-    firstProject: (Map<String, String> params) => PageGuard(
+    createProject: (Map<String, String> params) => PageGuard(
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
             Guard.checkIsUser,
             Guard.checkIsDev,
-            Guard.checkNotHaveApp,
           ],
-          child: CreateFirstProjectPage(),
+          child: CreateProjectPage(),
+        ),
+    selectProject: (Map<String, String> params) => PageGuard(
+          guards: [
+            Guard.checkAuthenticated,
+            Guard.checkCguAccepted,
+            Guard.checkIsUser,
+            Guard.checkIsDev,
+            BackofficeGuard.checkHaveApp,
+          ],
+          child: SelectProjectPage(),
         ),
     homeRoute: (Map<String, String> params) => PageGuard(
           guards: [
@@ -60,6 +71,7 @@ class BackofficeNavigator extends CommonNavigator {
             Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
+            BackofficeGuard.checkHasSelectedApp,
           ],
           child: OverviewPage(),
         ),
@@ -70,6 +82,7 @@ class BackofficeNavigator extends CommonNavigator {
             Guard.checkIsUser,
             Guard.checkIsDev,
             BackofficeGuard.checkHaveApp,
+            BackofficeGuard.checkHasSelectedApp,
           ],
           child: SettingsPage(),
         ),
