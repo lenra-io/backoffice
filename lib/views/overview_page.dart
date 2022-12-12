@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/views/backoffice_page.dart';
+import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/api/response_models/build_response.dart';
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/build_model.dart';
 import 'package:client_common/models/user_application_model.dart';
+import 'package:client_common/navigator/common_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lenra_components/lenra_components.dart';
@@ -12,12 +15,38 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OverviewPage extends StatefulWidget {
+  int appId;
+  OverviewPage({Key? key, required this.appId}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _OverviewPageState();
 }
 
 class _OverviewPageState extends State<OverviewPage> {
   Timer? timer;
+  AppResponse? app;
+
+  @override
+  void initState() {
+    var buildModel = context.read<BuildModel>();
+    UserApplicationModel userApplicationModel = context.read<UserApplicationModel>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      userApplicationModel.fetchUserApplications().then(
+        (_) {
+          setState(() {
+            app = userApplicationModel.getApp(widget.appId);
+          });
+          if (app == null) {
+            CommonNavigator.go(context, BackofficeNavigator.selectProject);
+          } else {
+            buildModel.fetchBuilds(widget.appId);
+          }
+        },
+      );
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -27,24 +56,12 @@ class _OverviewPageState extends State<OverviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedApp = context.read<UserApplicationModel>().selectedApp;
     var buildModel = context.read<BuildModel>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<UserApplicationModel>().fetchUserApplications().then(
-        (value) {
-          if (selectedApp != null) {
-            buildModel.fetchBuilds(selectedApp.id);
-          }
-        },
-      );
-    });
-
-    var theme = LenraTheme.of(context);
     // A bit dirty
-    if (selectedApp == null) return Center(child: CircularProgressIndicator());
+    if (app == null) return Center(child: CircularProgressIndicator());
+
     List<BuildResponse> builds =
-        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(selectedApp.id));
+        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id));
 
     var hasPendingBuild = false;
     var hasPublishedBuild = false;
@@ -53,7 +70,7 @@ class _OverviewPageState extends State<OverviewPage> {
       builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
 
       // Check if there is a createBuildStatus that is currently fetching.
-      var createBuildStatusFetching = buildModel.createBuildStatus[selectedApp.id]?.isFetching() ?? false;
+      var createBuildStatusFetching = buildModel.createBuildStatus[app!.id]?.isFetching() ?? false;
 
       hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending) || createBuildStatusFetching;
 
@@ -67,60 +84,67 @@ class _OverviewPageState extends State<OverviewPage> {
     }
 
     return BackofficePage(
-      title: Text("Overview"),
-      mainActionWidget: LenraButton(
+      key: ValueKey("overview"),
+      title: "Overview",
+      actionWidget: LenraButton(
         text: "Publish my application",
         disabled: hasPendingBuild,
-        onPressed: () => buildModel.createBuild(selectedApp.id),
+        onPressed: () => buildModel.createBuild(app!.id),
       ),
-      child: LenraFlex(
-        direction: Axis.vertical,
-        spacing: 16,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              LenraButton(
-                disabled: !hasPublishedBuild,
-                text: "See my application",
-                type: LenraComponentType.secondary,
-                onPressed: () async {
-                  final url = "${Config.instance.appBaseUrl}${selectedApp.serviceName}";
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  } else {
-                    throw "Could not launch $url";
-                  }
-                },
-              ),
-            ],
-          ),
-          Table(
-            children: [
-              TableRow(children: [
-                LenraTableCell(
-                  child: Text("Build number"),
-                ),
-                LenraTableCell(
-                  child: Text("Date"),
-                ),
-                LenraTableCell(
-                  child: Text("Build status"),
-                ),
-              ]),
-              if (builds.isNotEmpty) buildRow(context, builds.last),
-              if (builds.length >= 2 && builds.last.status == BuildStatus.pending)
-                buildRow(context, builds.reversed.elementAt(1)),
-            ],
-          ),
-          if (builds.isEmpty)
-            Text(
-              "Your application has not been built yet.\nClick “Publish my application” to create your first build.",
-              style: theme.lenraTextThemeData.disabledBodyText,
-              textAlign: TextAlign.center,
+      child: buildPage(context, hasPublishedBuild, builds),
+    );
+  }
+
+  Widget buildPage(BuildContext context, bool hasPublishedBuild, List<BuildResponse> builds) {
+    var theme = LenraTheme.of(context);
+
+    return LenraFlex(
+      direction: Axis.vertical,
+      spacing: 16,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            LenraButton(
+              disabled: !hasPublishedBuild,
+              text: "See my application",
+              type: LenraComponentType.secondary,
+              onPressed: () async {
+                final url = "${Config.instance.appBaseUrl}${app!.serviceName}";
+                if (await canLaunchUrl(Uri.parse(url))) {
+                  await launchUrl(Uri.parse(url));
+                } else {
+                  throw "Could not launch $url";
+                }
+              },
             ),
-        ],
-      ),
+          ],
+        ),
+        Table(
+          children: [
+            TableRow(children: [
+              LenraTableCell(
+                child: Text("Build number"),
+              ),
+              LenraTableCell(
+                child: Text("Date"),
+              ),
+              LenraTableCell(
+                child: Text("Build status"),
+              ),
+            ]),
+            if (builds.isNotEmpty) buildRow(context, builds.last),
+            if (builds.length >= 2 && builds.last.status == BuildStatus.pending)
+              buildRow(context, builds.reversed.elementAt(1)),
+          ],
+        ),
+        if (builds.isEmpty)
+          Text(
+            "Your application has not been built yet.\nClick “Publish my application” to create your first build.",
+            style: theme.lenraTextThemeData.disabledBodyText,
+            textAlign: TextAlign.center,
+          ),
+      ],
     );
   }
 

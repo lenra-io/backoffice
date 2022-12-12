@@ -14,12 +14,14 @@ import 'package:lenra_components/utils/form_validators.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-class ManageAccessMenu extends StatefulWidget {
+class ManageAccessPage extends StatefulWidget {
+  final int appId;
+  ManageAccessPage({required this.appId});
   @override
-  State<StatefulWidget> createState() => _ManageAccessMenuState();
+  State<StatefulWidget> createState() => _ManageAccessPageState();
 }
 
-class _ManageAccessMenuState extends State<ManageAccessMenu> {
+class _ManageAccessPageState extends State<ManageAccessPage> {
   final logger = Logger("ManageAccessMenu");
   final _formKey = GlobalKey<FormState>();
   bool isPublic = false;
@@ -31,13 +33,12 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var appId = context.read<UserApplicationModel>().selectedApp!.id;
-      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(appId);
+      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(widget.appId);
       mainEnvRequest.then(
         (mainEnv) {
           isPublic = mainEnv.mainEnv.isPublic;
           isInitialized = true;
-          context.read<UserApplicationModel>().getInvitedUsers(appId, mainEnv.mainEnv.id).then((accesses) {
+          context.read<UserApplicationModel>().getInvitedUsers(widget.appId, mainEnv.mainEnv.id).then((accesses) {
             setState(() {
               invitedUsers = accesses.accesses.map((access) => access.email!).toList();
             });
@@ -71,13 +72,13 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
                   LenraToggle(
                     value: isPublic,
                     onPressed: (value) {
-                      var appId = context.read<UserApplicationModel>().selectedApp!.id;
-                      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(appId);
+                      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(widget.appId);
                       mainEnvRequest.then(
                         (mainEnv) {
                           context
                               .read<UserApplicationModel>()
-                              .updateEnvironment(appId, mainEnv.mainEnv.id, UpdateEnvironmentRequest(isPublic: value))
+                              .updateEnvironment(
+                                  widget.appId, mainEnv.mainEnv.id, UpdateEnvironmentRequest(isPublic: value))
                               .then((envResponse) {
                             setState(() {
                               isPublic = envResponse.environmentResponse.isPublic;
@@ -143,18 +144,18 @@ class _ManageAccessMenuState extends State<ManageAccessMenu> {
               ),
             ],
           )
-        : CircularProgressIndicator();
+        : Align(alignment: Alignment.topCenter, child: CircularProgressIndicator());
   }
 
   void submit() {
     if (_formKey.currentState!.validate()) {
-      var appId = context.read<UserApplicationModel>().selectedApp!.id;
-      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(appId);
+      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(widget.appId);
       mainEnvRequest.then(
         (mainEnv) {
           context
               .read<UserApplicationModel>()
-              .inviteUser(appId, mainEnv.mainEnv.id, CreateEnvironmentUserAccessRequest(email: textfieldUserEmail))
+              .inviteUser(
+                  widget.appId, mainEnv.mainEnv.id, CreateEnvironmentUserAccessRequest(email: textfieldUserEmail))
               .then((envResponse) {
             setState(() {
               invitedUsers.add(textfieldUserEmail);

@@ -1,5 +1,6 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_common/models/user_application_model.dart';
+import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/views/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/lenra_components.dart';
@@ -88,8 +89,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
   void submit() {
     if (_formKey.currentState!.validate()) {
       context.read<UserApplicationModel>().createApp(projectName, gitRepository).then((app) {
-        context.read<UserApplicationModel>().selectedApp = app;
-        Navigator.of(context).pushNamed(BackofficeNavigator.homeRoute);
+        CommonNavigator.go(context, BackofficeNavigator.overview, params: {"appId": app.id.toString()});
       }).catchError((error) {
         logger.warning(error);
       });
