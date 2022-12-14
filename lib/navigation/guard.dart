@@ -12,8 +12,6 @@ class BackofficeGuard extends Guard {
   BackofficeGuard({required super.isValid, required super.onInvalid});
 
   static final BackofficeGuard checkHaveApp = BackofficeGuard(isValid: _haveApp(true), onInvalid: _toWelcome);
-  // static final BackofficeGuard checkHasSelectedApp =
-  //     BackofficeGuard(isValid: _hasSelectedApp(), onInvalid: _toSelectApp);
 
   static Future<bool> Function(BuildContext) _haveApp(bool mustHaveApp) {
     return (BuildContext context) async {
