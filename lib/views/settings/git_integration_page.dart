@@ -9,7 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 class GitIntegrationPage extends StatefulWidget {
-  int appId;
+  final int appId;
   GitIntegrationPage({required this.appId});
   @override
   State<StatefulWidget> createState() {

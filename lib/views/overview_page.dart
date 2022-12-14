@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OverviewPage extends StatefulWidget {
-  int appId;
+  final int appId;
   OverviewPage({Key? key, required this.appId}) : super(key: key);
 
   @override
