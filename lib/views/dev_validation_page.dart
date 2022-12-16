@@ -9,14 +9,14 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DevValidationPage extends StatefulWidget {
+class ActivationCodePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _DevValidationPageState();
+    return _ActivationCodePageState();
   }
 }
 
-class _DevValidationPageState extends State<DevValidationPage> {
+class _ActivationCodePageState extends State<ActivationCodePage> {
   final logger = Logger('ActivationCodePage');
 
   String code = "";
@@ -29,7 +29,7 @@ class _DevValidationPageState extends State<DevValidationPage> {
 
     return SimplePage(
       title: "Thank you for your registration",
-      message: "Great things are about to happen! Do you want to access our developer platform?",
+      message: "Great things are about to happen! We will send you soon a token to access our developer platform.",
       child: LenraFlex(
         direction: Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,23 +44,23 @@ class _DevValidationPageState extends State<DevValidationPage> {
                 fillParent: true,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  LenraButton(
-                    text: "Become a developer",
-                    disabled: isLoading,
-                    onPressed: () {
-                      validateDev();
-                    },
+                  Expanded(
+                    child: LenraTextField(
+                      size: LenraComponentSize.large,
+                      hintText: "Token",
+                      onChanged: (String value) {
+                        code = value;
+                      },
+                      onSubmitted: (_) {
+                        submit();
+                      },
+                    ),
                   ),
                   LenraButton(
-                    text: "Take me to the home page",
-                    type: LenraComponentType.tertiary,
-                    onPressed: () async {
-                      const url = "https://www.lenra.io";
-                      if (await canLaunchUrl(Uri.parse(url))) {
-                        await launchUrl(Uri.parse(url));
-                      } else {
-                        throw "Could not launch $url";
-                      }
+                    text: "Confirm the token",
+                    disabled: isLoading,
+                    onPressed: () {
+                      submit();
                     },
                   ),
                 ],
@@ -68,13 +68,25 @@ class _DevValidationPageState extends State<DevValidationPage> {
               if (hasError) Error(validateDevError!),
             ],
           ),
+          LenraButton(
+            text: "I don't have a token yet, take me to the home page.",
+            type: LenraComponentType.tertiary,
+            onPressed: () async {
+              const url = "https://www.lenra.io";
+              if (await canLaunchUrl(Uri.parse(url))) {
+                await launchUrl(Uri.parse(url));
+              } else {
+                throw "Could not launch $url";
+              }
+            },
+          ),
         ],
       ),
     );
   }
 
-  void validateDev() {
-    context.read<AuthModel>().validateDev().then((_) {
+  void submit() {
+    context.read<AuthModel>().validateDev(code).then((_) {
       Navigator.of(context).pushReplacementNamed(BackofficeNavigator.welcome);
     }).catchError((error) {
       logger.warning(error);

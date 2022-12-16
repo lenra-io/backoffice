@@ -1,4 +1,5 @@
 import 'package:client_common/api/request_models/update_app_request.dart';
+import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/lenra_application/api_error_snack_bar.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +8,16 @@ import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-class GitIntegrationMenu extends StatefulWidget {
+class GitIntegrationPage extends StatefulWidget {
+  final int appId;
+  GitIntegrationPage({required this.appId});
   @override
   State<StatefulWidget> createState() {
-    return _GitIntegrationMenuState();
+    return _GitIntegrationPageState();
   }
 }
 
-class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
+class _GitIntegrationPageState extends State<GitIntegrationPage> {
   final logger = Logger("GitIntegrationMenu");
   final _formKey = GlobalKey<FormState>();
   String newRepositoryUrl = "";
@@ -23,21 +26,39 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
   final TextEditingController _branchController = TextEditingController();
   bool isLoading = false;
 
+  AppResponse? selectedApp;
+
   @override
   void initState() {
-    _controller.text = context.read<UserApplicationModel>().selectedApp?.repository ?? "";
-    newRepositoryUrl = _controller.text;
-    _branchController.text = context.read<UserApplicationModel>().selectedApp?.repositoryBranch ?? "";
-    newRepositoryBranch = _branchController.text;
+    UserApplicationModel userApplicationModel = context.read<UserApplicationModel>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      userApplicationModel.fetchUserApplications().then((value) {
+        setState(() {
+          selectedApp = userApplicationModel.getApp(widget.appId);
+          _controller.text = selectedApp?.repository ?? "";
+          newRepositoryUrl = _controller.text;
+          _branchController.text = selectedApp?.repositoryBranch ?? "";
+          newRepositoryBranch = _branchController.text;
+        });
+      });
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final lenraTextThemeData = LenraTheme.of(context).lenraTextThemeData;
-    bool urlChanged = newRepositoryUrl != context.read<UserApplicationModel>().selectedApp?.repository;
-    bool branchChanged =
-        newRepositoryBranch != (context.read<UserApplicationModel>().selectedApp?.repositoryBranch ?? "");
+    bool urlChanged = newRepositoryUrl != selectedApp?.repository;
+    bool branchChanged = newRepositoryBranch != (selectedApp?.repositoryBranch ?? "");
+
+    if (selectedApp == null) {
+      return Align(
+        alignment: Alignment.topCenter,
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Form(
       key: _formKey,
@@ -75,6 +96,7 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
                       size: LenraComponentSize.large,
                       hintText: "https://repo-URL.git",
                       controller: _controller,
+                      initialValue: selectedApp!.repository!,
                       onSubmitted: (value) {
                         submitForm();
                       },
@@ -134,15 +156,14 @@ class _GitIntegrationMenuState extends State<GitIntegrationMenu> {
 
   void submitForm() {
     if (_formKey.currentState!.validate()) {
-      bool urlChanged = newRepositoryUrl != context.read<UserApplicationModel>().selectedApp?.repository;
-      bool branchChanged =
-          newRepositoryBranch != (context.read<UserApplicationModel>().selectedApp?.repositoryBranch ?? "");
+      bool urlChanged = newRepositoryUrl != selectedApp?.repository;
+      bool branchChanged = newRepositoryBranch != (selectedApp?.repositoryBranch ?? "");
 
       if (urlChanged || branchChanged) {
         setState(() {
           isLoading = true;
         });
-        int selectedAppId = context.read<UserApplicationModel>().selectedApp!.id;
+        int selectedAppId = selectedApp!.id;
         context
             .read<UserApplicationModel>()
             .updateApp(

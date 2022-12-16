@@ -1,4 +1,5 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
+import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/views/simple_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_button.dart';
@@ -16,7 +17,7 @@ class WelcomeDevPage extends StatelessWidget {
       message: welcomeText,
       child: LenraButton(
         text: buttonText,
-        onPressed: () => Navigator.of(context).pushReplacementNamed(BackofficeNavigator.createProject),
+        onPressed: () => CommonNavigator.go(context, BackofficeNavigator.createProject),
       ),
     );
   }
