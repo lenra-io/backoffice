@@ -5,12 +5,15 @@ import 'package:client_common/api/response_models/build_response.dart';
 import 'package:client_common/api/response_models/get_main_env_response.dart';
 import 'package:client_common/models/build_model.dart';
 import 'package:client_common/models/user_application_model.dart';
+import 'package:client_common/navigator/common_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_status_sticker.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:provider/provider.dart';
 
 class SelectProjectPage extends StatefulWidget {
+  SelectProjectPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _SelectProjectPageState();
 }
@@ -18,24 +21,26 @@ class SelectProjectPage extends StatefulWidget {
 class _SelectProjectPageState extends State<SelectProjectPage> {
   @override
   Widget build(BuildContext context) {
-    var theme = LenraTheme.of(context);
     return BackofficePage(
-      title: Text("Project selection"),
-      mainActionWidget: LenraButton(
-        text: "Create a new project",
-        onPressed: () => Navigator.of(context).pushNamed(BackofficeNavigator.createProject),
-      ),
-      child: LenraFlex(
-        direction: Axis.vertical,
-        spacing: 16,
-        children: [
-          Text(
-            "My projects",
-            style: theme.lenraTextThemeData.headline2,
-          ),
-          ...context.read<UserApplicationModel>().userApps.map((app) => _ProjectRow(app: app))
-        ],
-      ),
+      key: ValueKey("select-project"),
+      title: "Select Project",
+      child: buildPage(context),
+    );
+  }
+
+  Widget buildPage(BuildContext context) {
+    var theme = LenraTheme.of(context);
+
+    return LenraFlex(
+      direction: Axis.vertical,
+      spacing: 16,
+      children: [
+        Text(
+          "My projects",
+          style: theme.lenraTextThemeData.headline2,
+        ),
+        ...context.read<UserApplicationModel>().userApps.map((app) => _ProjectRow(app: app))
+      ],
     );
   }
 }
@@ -89,8 +94,7 @@ class _ProjectRowState extends State<_ProjectRow> {
       BuildResponse? latestBuild = context.read<BuildModel>().latestBuildForApp(widget.app.id);
       return InkWell(
         onTap: () {
-          context.read<UserApplicationModel>().selectedApp = widget.app;
-          Navigator.of(context).pushNamed(BackofficeNavigator.homeRoute);
+          CommonNavigator.go(context, BackofficeNavigator.overview, params: {"appId": widget.app.id.toString()});
         },
         child: Container(
           decoration: BoxDecoration(
@@ -140,8 +144,11 @@ class _ProjectRowState extends State<_ProjectRow> {
                       type: LenraComponentType.tertiary,
                       leftIcon: Icon(Icons.more_horiz),
                       onPressed: () {
-                        context.read<UserApplicationModel>().selectedApp = widget.app;
-                        Navigator.of(context).pushNamed(BackofficeNavigator.settings);
+                        CommonNavigator.go(
+                          context,
+                          BackofficeNavigator.gitSettings,
+                          params: {"appId": widget.app.id.toString()},
+                        );
                       },
                     )
                   ],

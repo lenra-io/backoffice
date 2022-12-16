@@ -49,12 +49,9 @@ class Backoffice extends StatelessWidget {
       ],
       builder: (BuildContext context, _) => LenraTheme(
         themeData: themeData,
-        child: MaterialApp(
+        child: MaterialApp.router(
+          routerConfig: BackofficeNavigator.router,
           title: 'Lenra',
-          navigatorKey: BackofficeNavigator.navigatorKey,
-          onGenerateInitialRoutes: (initialRoute) =>
-              [BackofficeNavigator.handleGenerateRoute(RouteSettings(name: initialRoute))],
-          onGenerateRoute: BackofficeNavigator.handleGenerateRoute,
           theme: ThemeData(
             visualDensity: VisualDensity.standard,
             textTheme: TextTheme(bodyText2: themeData.lenraTextThemeData.bodyText),
