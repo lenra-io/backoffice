@@ -33,42 +33,42 @@ class _DevValidationPageState extends State<DevValidationPage> {
       message: "Great things are about to happen! Do you confirm that want to access our developer platform ?",
       child: LenraFlex(
         direction: Axis.vertical,
+        fillParent: true,
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 32,
         children: [
           LenraFlex(
-            direction: Axis.vertical,
             spacing: 16,
+            fillParent: true,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              LenraFlex(
-                spacing: 16,
-                fillParent: true,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  LenraButton(
-                    text: "Become a developer",
-                    disabled: isLoading,
-                    onPressed: () {
-                      validateDev();
-                    },
-                  ),
-                  LenraButton(
-                    text: "Take me to the home page",
-                    type: LenraComponentType.tertiary,
-                    onPressed: () async {
-                      const url = "https://www.lenra.io";
-                      if (await canLaunchUrl(Uri.parse(url))) {
-                        await launchUrl(Uri.parse(url));
-                      } else {
-                        throw "Could not launch $url";
-                      }
-                    },
-                  ),
-                ],
+              Flexible(
+                child: LenraButton(
+                  text: "Become a developer",
+                  disabled: isLoading,
+                  onPressed: () {
+                    validateDev();
+                  },
+                ),
               ),
-              if (hasError) Error(validateDevError!),
+              Flexible(
+                child: LenraButton(
+                  text: "Take me to the home page",
+                  type: LenraComponentType.tertiary,
+                  onPressed: () async {
+                    const url = "https://www.lenra.io";
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      throw "Could not launch $url";
+                    }
+                  },
+                ),
+              ),
             ],
           ),
+          if (hasError) Error(validateDevError!),
         ],
       ),
     );

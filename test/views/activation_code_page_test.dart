@@ -26,6 +26,6 @@ void main() {
 
     final textFinder = find.byType(Text);
 
-    expect(textFinder, findsNWidgets(5));
+    expect(textFinder, findsNWidgets(4));
   });
 }
