@@ -75,7 +75,7 @@ class _DevValidationPageState extends State<DevValidationPage> {
   }
 
   void validateDev() {
-    context.read<AuthModel>().validateDev(code).then((_) {
+    context.read<AuthModel>().validateDev().then((_) {
       CommonNavigator.go(context, BackofficeNavigator.welcome);
     }).catchError((error) {
       logger.warning(error);
