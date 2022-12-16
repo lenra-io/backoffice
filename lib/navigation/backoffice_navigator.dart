@@ -1,6 +1,6 @@
 import 'package:client_backoffice/navigation/guard.dart';
-import 'package:client_backoffice/views/activation_code_page.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
+import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
@@ -13,7 +13,7 @@ import 'package:flutter/widgets.dart';
 
 class BackofficeNavigator extends CommonNavigator {
   static const String homeRoute = "/";
-  static const String validationDevRoute = "/validation-dev";
+  static const String devValidationRoute = "/validation-dev";
   static const String welcome = "/welcome";
   static const String createProject = "/create-project";
   static const String selectProject = "/select-project";
@@ -27,13 +27,13 @@ class BackofficeNavigator extends CommonNavigator {
     ..addAll(backofficeRoutes);
 
   static final Map<String, CustomPageBuilder> backofficeRoutes = {
-    validationDevRoute: (Map<String, String> params) => PageGuard(
+    devValidationRoute: (Map<String, String> params) => PageGuard(
           guards: [
             Guard.checkAuthenticated,
             Guard.checkCguAccepted,
             Guard.checkIsNotDev,
           ],
-          child: ActivationCodePage(),
+          child: DevValidationPage(),
         ),
     welcome: (Map<String, String> params) => PageGuard(
           guards: [
