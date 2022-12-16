@@ -83,12 +83,9 @@ Widget build(BuildContext context) {
     ],
     builder: (BuildContext context, _) =&gt; LenraTheme(
       themeData: themeData,
-      child: MaterialApp(
+      child: MaterialApp.router(
+        routerConfig: BackofficeNavigator.router,
         title: &#39;Lenra&#39;,
-        navigatorKey: BackofficeNavigator.navigatorKey,
-        onGenerateInitialRoutes: (initialRoute) =&gt;
-            [BackofficeNavigator.handleGenerateRoute(RouteSettings(name: initialRoute))],
-        onGenerateRoute: BackofficeNavigator.handleGenerateRoute,
         theme: ThemeData(
           visualDensity: VisualDensity.standard,
           textTheme: TextTheme(bodyText2: themeData.lenraTextThemeData.bodyText),

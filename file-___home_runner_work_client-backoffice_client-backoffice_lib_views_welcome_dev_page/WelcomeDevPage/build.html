@@ -77,7 +77,7 @@ Widget build(BuildContext context) {
     message: welcomeText,
     child: LenraButton(
       text: buttonText,
-      onPressed: () =&gt; Navigator.of(context).pushReplacementNamed(BackofficeNavigator.createProject),
+      onPressed: () =&gt; CommonNavigator.go(context, BackofficeNavigator.createProject),
     ),
   );
 }</code></pre>
