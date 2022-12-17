@@ -1,6 +1,6 @@
 import 'package:client_backoffice/navigation/guard.dart';
-import 'package:client_backoffice/views/activation_code_page.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
+import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
@@ -24,7 +24,7 @@ class BackofficeNavigator extends CommonNavigator {
           Guard.checkCguAccepted,
           Guard.checkIsNotDev,
         ],
-        child: ActivationCodePage(),
+        child: DevValidationPage(),
       ),
     ),
   );
