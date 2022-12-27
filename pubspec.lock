@@ -75,8 +75,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v1.0.0-beta.23"
-      resolved-ref: cf058df40423327b5b88649703609ca357cbe2c3
+      ref: "v1.0.0-beta.25"
+      resolved-ref: aacd46137a01a3e681df39f04bc041b27b439653
       url: "git@github.com:lenra-io/client-common.git"
     source: git
     version: "1.0.0"
@@ -149,7 +149,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_launcher_icons:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
@@ -260,8 +260,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "v1.0.0-beta.49"
-      resolved-ref: "2643bf10012d59b6e7e13e0d9f44f18c09a14975"
+      ref: "v1.0.0-beta.50"
+      resolved-ref: "105fbc6d4ec8550b23832f0c07923e39b6e0d665"
       url: "git@github.com:lenra-io/lenra_components.git"
     source: git
     version: "0.0.0"
