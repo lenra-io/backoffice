@@ -25,6 +25,10 @@ class _SelectProjectPageState extends State<SelectProjectPage> {
       key: ValueKey("select-project"),
       title: "Select Project",
       child: buildPage(context),
+      actionWidget: LenraButton(
+        text: "Create a new project",
+        onPressed: () => CommonNavigator.go(context, BackofficeNavigator.createProject),
+      ),
     );
   }
 
