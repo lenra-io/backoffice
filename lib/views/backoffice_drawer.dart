@@ -37,7 +37,7 @@ class BackofficeDrawer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: theme.baseSize * 3,
-                  horizontal: theme.baseSize * 8,
+                  horizontal: theme.baseSize * 6,
                 ),
                 child: Image.asset('assets/images/logo-horizontal-white.png'),
               ),
