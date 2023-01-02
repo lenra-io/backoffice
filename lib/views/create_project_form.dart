@@ -22,6 +22,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
 
   String projectName = "";
   String gitRepository = "";
+  String? appNameTextfieldError = "";
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +68,13 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
           onChanged: (newValue) {
             setState(() {
               projectName = newValue;
+              appNameTextfieldError = "";
             });
           },
           onSubmitted: (_) {
             submit();
           },
+          errorMessage: appNameTextfieldError,
         ),
         LenraTextFormField(
           validator: validator([
@@ -125,6 +128,11 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
       context.read<UserApplicationModel>().createApp(projectName, gitRepository).then((app) {
         CommonNavigator.go(context, BackofficeNavigator.overview, params: {"appId": app.id.toString()});
       }).catchError((error) {
+        if (error.reason == "invalid_name") {
+          setState(() {
+            appNameTextfieldError = "This app name is already taken.";
+          });
+        }
         logger.warning(error);
       });
     }
