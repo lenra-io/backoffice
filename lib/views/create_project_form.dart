@@ -21,7 +21,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
 
   String projectName = "";
   String gitRepository = "";
-  String? appNameTextfieldError = "aaaa";
+  String? appNameTextfieldError = "";
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
           onChanged: (newValue) {
             setState(() {
               projectName = newValue;
-              appNameTextfieldError = "aaaaa";
+              appNameTextfieldError = "";
             });
           },
           onSubmitted: (_) {
