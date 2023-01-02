@@ -26,7 +26,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
   @override
   Widget build(BuildContext context) {
     bool isLoading = context.select<UserApplicationModel, bool>((m) => m.createApplicationStatus.isFetching());
-    bool userHasApp = context.read<UserApplicationModel>().userApps.isNotEmpty;
+
     return Form(
       key: _formKey,
       child: LenraFlex(
@@ -38,7 +38,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
           LenraFlex(
             spacing: 16,
             children: [
-              cancelButton(userHasApp),
+              cancelButton(context),
               LoadingButton(
                 text: "Create my project",
                 loading: isLoading,
@@ -94,7 +94,9 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
     );
   }
 
-  LenraButton cancelButton(bool hasApp) {
+  LenraButton cancelButton(BuildContext context) {
+    bool hasApp = context.read<UserApplicationModel>().userApps.isNotEmpty;
+
     if (hasApp) {
       return LenraButton(
         text: "Cancel",
