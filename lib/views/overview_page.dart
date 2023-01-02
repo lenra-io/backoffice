@@ -76,7 +76,9 @@ class _OverviewPageState extends State<OverviewPage> {
 
       if (hasPendingBuild) {
         timer = Timer(Duration(seconds: 5), () {
-          setState(() {});
+          buildModel.fetchBuilds(widget.appId).then((_) {
+            setState(() {});
+          });
         });
       }
 
@@ -89,7 +91,9 @@ class _OverviewPageState extends State<OverviewPage> {
       actionWidget: LenraButton(
         text: "Publish my application",
         disabled: hasPendingBuild,
-        onPressed: () => buildModel.createBuild(app!.id),
+        onPressed: () => buildModel.createBuild(app!.id).then((_) {
+          setState(() {});
+        }),
       ),
       child: buildPage(context, hasPublishedBuild, builds),
     );
