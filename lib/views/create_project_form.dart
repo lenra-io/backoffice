@@ -36,23 +36,9 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
         children: [
           fields(context),
           LenraFlex(
-            spacing: 8,
+            spacing: 16,
             children: [
-              LenraButton(
-                text: userHasApp ? "Cancel" : "Logout",
-                onPressed: () {
-                  if (userHasApp) {
-                    CommonNavigator.go(context, BackofficeNavigator.selectProject);
-                  } else {
-                    context.read<AuthModel>().logout().then((value) {
-                      CommonNavigator.go(context, CommonNavigator.login);
-                    }).catchError((error) {
-                      logger.warning(error);
-                    });
-                  }
-                },
-                type: LenraComponentType.tertiary,
-              ),
+              cancelButton(userHasApp),
               LoadingButton(
                 text: "Create my project",
                 loading: isLoading,
@@ -106,6 +92,30 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
         ),
       ],
     );
+  }
+
+  LenraButton cancelButton(bool hasApp) {
+    if (hasApp) {
+      return LenraButton(
+        text: "Cancel",
+        onPressed: () {
+          CommonNavigator.go(context, BackofficeNavigator.selectProject);
+        },
+        type: LenraComponentType.secondary,
+      );
+    } else {
+      return LenraButton(
+        text: "Logout",
+        onPressed: () {
+          context.read<AuthModel>().logout().then((value) {
+            CommonNavigator.go(context, CommonNavigator.login);
+          }).catchError((error) {
+            logger.warning(error);
+          });
+        },
+        type: LenraComponentType.secondary,
+      );
+    }
   }
 
   void submit() {
