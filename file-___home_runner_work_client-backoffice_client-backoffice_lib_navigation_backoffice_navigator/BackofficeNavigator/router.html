@@ -60,36 +60,7 @@
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static final GoRouter router = GoRouter(
-  routes: [
-    ...CommonNavigator.authRoutes,
-    &#47;&#47; Onboarding &amp; other pages
-    validationDev,
-    welcome,
-    createProject,
-
-    ShellRoute(
-      builder: (context, state, child) {
-        return PageGuard(
-          guards: [
-            Guard.checkAuthenticated,
-            Guard.checkCguAccepted,
-            Guard.checkIsUser,
-            Guard.checkIsDev,
-            BackofficeGuard.checkHaveApp,
-          ],
-          child: child,
-        );
-      },
-      routes: [
-        &#47;&#47; Pages in the Backoffice menu
-        selectProject,
-        overview,
-        settings,
-      ],
-    ),
-  ],
-);
+  <pre class="language-dart"><code class="language-dart">static final GoRouter router = GoRouter(routes: [selectProject]);
 
 </code></pre>
 </section>

@@ -61,17 +61,17 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static GoRoute overview = GoRoute(
-  name: &quot;overview&quot;,
-  path: &quot;&#47;:appId&quot;,
-  pageBuilder: (context, state) {
-    return NoTransitionPage(
-      key: state.pageKey,
-      child: OverviewPage(
-        appId: int.tryParse(state.params[&quot;appId&quot;]!)!,
-      ),
-    );
-  },
-);
+    name: &quot;overview&quot;,
+    path: &quot;:appId&quot;,
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        key: state.pageKey,
+        child: OverviewPage(
+          appId: int.tryParse(state.params[&quot;appId&quot;]!)!,
+        ),
+      );
+    },
+    routes: [settings]);
 
 </code></pre>
 </section>

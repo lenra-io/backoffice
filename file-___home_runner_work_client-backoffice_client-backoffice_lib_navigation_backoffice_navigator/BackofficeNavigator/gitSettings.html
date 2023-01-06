@@ -62,7 +62,7 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static GoRoute gitSettings = GoRoute(
   name: &quot;git-settings&quot;,
-  path: &quot;&#47;:appId&#47;settings&#47;git&quot;,
+  path: &quot;:appId&#47;settings&#47;git&quot;,
   pageBuilder: (context, state) {
     return NoTransitionPage(
       key: state.pageKey,
