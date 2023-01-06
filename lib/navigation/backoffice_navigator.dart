@@ -1,4 +1,3 @@
-import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
@@ -16,7 +15,7 @@ import 'package:go_router/go_router.dart';
 class BackofficeNavigator extends CommonNavigator {
   static GoRoute validationDev = GoRoute(
     name: "validation-dev",
-    path: "/validation-dev",
+    path: "validation-dev",
     pageBuilder: (context, state) => NoTransitionPage(
       child: PageGuard(
         guards: [
@@ -31,7 +30,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute welcome = GoRoute(
     name: "welcome",
-    path: "/welcome",
+    path: "welcome",
     pageBuilder: (context, state) => NoTransitionPage(
       child: PageGuard(
         guards: [
@@ -48,7 +47,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute createProject = GoRoute(
     name: "create-project",
-    path: "/create-project",
+    path: "create-project",
     pageBuilder: (context, state) => NoTransitionPage(
       child: PageGuard(
         guards: [
@@ -62,18 +61,9 @@ class BackofficeNavigator extends CommonNavigator {
     ),
   );
 
-  static GoRoute selectProject = GoRoute(
-    name: "select-project",
-    path: "/",
-    pageBuilder: (context, state) => NoTransitionPage(
-      key: state.pageKey,
-      child: SelectProjectPage(),
-    ),
-  );
-
   static GoRoute gitSettings = GoRoute(
     name: "git-settings",
-    path: "/:appId/settings/git",
+    path: ":appId/settings/git",
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
@@ -86,7 +76,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute accessSettings = GoRoute(
     name: "access-settings",
-    path: "/:appId/settings/access",
+    path: ":appId/settings/access",
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
@@ -114,48 +104,36 @@ class BackofficeNavigator extends CommonNavigator {
   );
 
   static GoRoute overview = GoRoute(
-    name: "overview",
-    path: "/:appId",
-    pageBuilder: (context, state) {
-      return NoTransitionPage(
-        key: state.pageKey,
-        child: OverviewPage(
-          appId: int.tryParse(state.params["appId"]!)!,
-        ),
-      );
-    },
-  );
+      name: "overview",
+      path: ":appId",
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          key: state.pageKey,
+          child: OverviewPage(
+            appId: int.tryParse(state.params["appId"]!)!,
+          ),
+        );
+      },
+      routes: [settings]);
 
-  static final GoRouter router = GoRouter(
+  static GoRoute selectProject = GoRoute(
+    name: "select-project",
+    path: "/",
+    pageBuilder: (context, state) => NoTransitionPage(
+      key: state.pageKey,
+      child: SelectProjectPage(),
+    ),
     routes: [
       ...CommonNavigator.authRoutes,
       // Onboarding & other pages
       validationDev,
       welcome,
       createProject,
-
-      ShellRoute(
-        builder: (context, state, child) {
-          return PageGuard(
-            guards: [
-              Guard.checkAuthenticated,
-              Guard.checkCguAccepted,
-              Guard.checkIsUser,
-              Guard.checkIsDev,
-              BackofficeGuard.checkHaveApp,
-            ],
-            child: child,
-          );
-        },
-        routes: [
-          // Pages in the Backoffice menu
-          selectProject,
-          overview,
-          settings,
-        ],
-      ),
+      overview,
     ],
   );
+
+  static final GoRouter router = GoRouter(routes: [selectProject]);
 }
 
 class FadeInTransitionPage extends CustomTransitionPage {
