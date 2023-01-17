@@ -127,10 +127,7 @@ class BackofficeNavigator extends CommonNavigator {
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
-        child: Builder(builder: (BuildContext context) {
-          GoRouter.of(context).goNamed(selectProject.path);
-          return Container();
-        }),
+        child: RootPage(),
       );
     },
     routes: [
@@ -196,4 +193,22 @@ class NoTransitionPage extends CustomTransitionPage {
             return child;
           },
         );
+}
+
+class RootPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _RootPageState();
+}
+
+class _RootPageState extends State<RootPage> {
+  @override
+  void initState() {
+    GoRouter.of(context).goNamed(BackofficeNavigator.selectProject.path);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
