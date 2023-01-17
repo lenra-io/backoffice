@@ -1,3 +1,4 @@
+import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
@@ -8,7 +9,6 @@ import 'package:client_backoffice/views/settings_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
 import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/navigator/guard.dart';
-import 'package:client_common/navigator/page_guard.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,54 +16,48 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute validationDev = GoRoute(
     name: "validation-dev",
     path: "validation-dev",
+    redirect: (context, state) => Guard.guards(context, [
+      Guard.checkAuthenticated,
+      Guard.checkCguAccepted,
+      Guard.checkIsNotDev,
+    ]),
     pageBuilder: (context, state) => NoTransitionPage(
-      child: PageGuard(
-        guards: [
-          Guard.checkAuthenticated,
-          Guard.checkCguAccepted,
-          Guard.checkIsNotDev,
-        ],
-        child: DevValidationPage(),
-      ),
+      child: DevValidationPage(),
     ),
   );
 
   static GoRoute welcome = GoRoute(
     name: "welcome",
     path: "welcome",
+    redirect: (context, state) => Guard.guards(context, [
+      Guard.checkAuthenticated,
+      Guard.checkCguAccepted,
+      Guard.checkIsUser,
+      Guard.checkIsDev,
+      Guard.checkNotHaveApp,
+    ]),
     pageBuilder: (context, state) => NoTransitionPage(
-      child: PageGuard(
-        guards: [
-          Guard.checkAuthenticated,
-          Guard.checkCguAccepted,
-          Guard.checkIsUser,
-          Guard.checkIsDev,
-          Guard.checkNotHaveApp,
-        ],
-        child: WelcomeDevPage(),
-      ),
+      child: WelcomeDevPage(),
     ),
   );
 
   static GoRoute createProject = GoRoute(
     name: "create-project",
     path: "create-project",
+    redirect: (context, state) => Guard.guards(context, [
+      Guard.checkAuthenticated,
+      Guard.checkCguAccepted,
+      Guard.checkIsUser,
+      Guard.checkIsDev,
+    ]),
     pageBuilder: (context, state) => NoTransitionPage(
-      child: PageGuard(
-        guards: [
-          Guard.checkAuthenticated,
-          Guard.checkCguAccepted,
-          Guard.checkIsUser,
-          Guard.checkIsDev,
-        ],
-        child: CreateProjectPage(),
-      ),
+      child: CreateProjectPage(),
     ),
   );
 
   static GoRoute gitSettings = GoRoute(
     name: "git-settings",
-    path: ":appId/settings/git",
+    path: "settings/git",
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
@@ -76,7 +70,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute accessSettings = GoRoute(
     name: "access-settings",
-    path: ":appId/settings/access",
+    path: "settings/access",
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
@@ -104,25 +98,48 @@ class BackofficeNavigator extends CommonNavigator {
   );
 
   static GoRoute overview = GoRoute(
-      name: "overview",
-      path: ":appId",
-      pageBuilder: (context, state) {
-        return NoTransitionPage(
-          key: state.pageKey,
-          child: OverviewPage(
-            appId: int.tryParse(state.params["appId"]!)!,
-          ),
-        );
-      },
-      routes: [settings]);
+    name: "overview",
+    path: ":appId",
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkAuthenticated,
+        Guard.checkCguAccepted,
+        Guard.checkIsUser,
+        Guard.checkIsDev,
+        BackofficeGuard.checkHaveApp,
+      ],
+    ),
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        key: state.pageKey,
+        child: OverviewPage(
+          appId: int.tryParse(state.params["appId"]!)!,
+        ),
+      );
+    },
+    routes: [settings],
+  );
 
   static GoRoute selectProject = GoRoute(
     name: "select-project",
     path: "/",
-    pageBuilder: (context, state) => NoTransitionPage(
-      key: state.pageKey,
-      child: SelectProjectPage(),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkAuthenticated,
+        Guard.checkCguAccepted,
+        Guard.checkIsUser,
+        Guard.checkIsDev,
+        BackofficeGuard.checkHaveApp,
+      ],
     ),
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        key: state.pageKey,
+        child: SelectProjectPage(),
+      );
+    },
     routes: [
       ...CommonNavigator.authRoutes,
       // Onboarding & other pages

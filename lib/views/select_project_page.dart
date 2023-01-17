@@ -11,14 +11,7 @@ import 'package:lenra_components/component/lenra_status_sticker.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:provider/provider.dart';
 
-class SelectProjectPage extends StatefulWidget {
-  SelectProjectPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _SelectProjectPageState();
-}
-
-class _SelectProjectPageState extends State<SelectProjectPage> {
+class SelectProjectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackofficePage(
