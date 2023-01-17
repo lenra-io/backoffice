@@ -121,36 +121,53 @@ class BackofficeNavigator extends CommonNavigator {
     routes: [settings],
   );
 
+  static GoRoute root = GoRoute(
+    name: "root",
+    path: "/",
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        key: state.pageKey,
+        child: Builder(builder: (BuildContext context) {
+          GoRouter.of(context).goNamed(selectProject.path);
+          return Container();
+        }),
+      );
+    },
+    routes: [
+      CommonNavigator.authRoutes,
+      // Onboarding & other pages
+      validationDev,
+      welcome,
+      createProject,
+      overview,
+      selectProject,
+    ],
+  );
+
   static GoRoute selectProject = GoRoute(
     name: "select-project",
-    path: "/",
-    redirect: (context, state) => Guard.guards(
-      context,
-      [
-        Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
-        Guard.checkIsDev,
-        BackofficeGuard.checkHaveApp,
-      ],
-    ),
+    path: "select-project",
+    redirect: (context, state) {
+      return Guard.guards(
+        context,
+        [
+          Guard.checkAuthenticated,
+          Guard.checkCguAccepted,
+          Guard.checkIsUser,
+          Guard.checkIsDev,
+          BackofficeGuard.checkHaveApp,
+        ],
+      );
+    },
     pageBuilder: (context, state) {
       return NoTransitionPage(
         key: state.pageKey,
         child: SelectProjectPage(),
       );
     },
-    routes: [
-      ...CommonNavigator.authRoutes,
-      // Onboarding & other pages
-      validationDev,
-      welcome,
-      createProject,
-      overview,
-    ],
   );
 
-  static final GoRouter router = GoRouter(routes: [selectProject]);
+  static final GoRouter router = GoRouter(routes: [root]);
 }
 
 class FadeInTransitionPage extends CustomTransitionPage {
