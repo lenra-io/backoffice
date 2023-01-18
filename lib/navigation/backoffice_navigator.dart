@@ -111,6 +111,7 @@ class BackofficeNavigator extends CommonNavigator {
       ],
     ),
     pageBuilder: (context, state) {
+      print("PAGE BUILDER OVERVIEW");
       return NoTransitionPage(
         key: state.pageKey,
         child: OverviewPage(
@@ -124,10 +125,15 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute root = GoRoute(
     name: "root",
     path: "/",
+    redirect: (_, __) {
+      print("REDIRECTING FROM ROOT");
+      return "/select-project";
+    },
     pageBuilder: (context, state) {
+      print("PAGE BUILDER ROOT");
       return NoTransitionPage(
         key: state.pageKey,
-        child: RootPage(),
+        child: Container(),
       );
     },
     routes: [
@@ -145,6 +151,7 @@ class BackofficeNavigator extends CommonNavigator {
     name: "select-project",
     path: "select-project",
     redirect: (context, state) {
+      print("RUNNING GUARDS");
       return Guard.guards(
         context,
         [
@@ -157,6 +164,7 @@ class BackofficeNavigator extends CommonNavigator {
       );
     },
     pageBuilder: (context, state) {
+      print("PAGE BUILDER SELECTPROJECT");
       return NoTransitionPage(
         key: state.pageKey,
         child: SelectProjectPage(),
@@ -193,22 +201,4 @@ class NoTransitionPage extends CustomTransitionPage {
             return child;
           },
         );
-}
-
-class RootPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _RootPageState();
-}
-
-class _RootPageState extends State<RootPage> {
-  @override
-  void initState() {
-    GoRouter.of(context).goNamed(BackofficeNavigator.selectProject.path);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
