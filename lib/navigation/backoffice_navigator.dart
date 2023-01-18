@@ -99,7 +99,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute overview = GoRoute(
     name: "overview",
-    path: ":appId",
+    path: "app/:appId",
     redirect: (context, state) => Guard.guards(
       context,
       [
@@ -125,8 +125,10 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute root = GoRoute(
     name: "root",
     path: "/",
-    redirect: (_, __) {
+    redirect: (context, state) {
       print("REDIRECTING FROM ROOT");
+      print(state.pageKey);
+      print(state.path);
       return "/select-project";
     },
     pageBuilder: (context, state) {
