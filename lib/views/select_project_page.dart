@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 class SelectProjectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("LOADING SELECT PROJECT PAGE");
     return BackofficePage(
       key: ValueKey("select-project"),
       title: "Select Project",
