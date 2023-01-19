@@ -111,7 +111,6 @@ class BackofficeNavigator extends CommonNavigator {
       ],
     ),
     pageBuilder: (context, state) {
-      print("PAGE BUILDER OVERVIEW");
       return NoTransitionPage(
         key: state.pageKey,
         child: OverviewPage(
@@ -125,20 +124,15 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute root = GoRoute(
       name: "root",
       path: "/",
-      // redirect: (context, state) {
-      //   print("REDIRECTING FROM ROOT");
-      //   print(state.pageKey);
-      //   print(state.path);
-      //   return router.namedLocation(selectProject.name!);
-      // },
       pageBuilder: (context, state) {
-        print("PAGE BUILDER ROOT");
         return NoTransitionPage(
           key: state.pageKey,
           child: Builder(builder: (context) {
-            WidgetsBinding.instance.addPostFrameCallback(((_) {
-              router.goNamed(selectProject.name!);
-            }));
+            if (GoRouter.of(context).location == "/") {
+              WidgetsBinding.instance.addPostFrameCallback(((_) {
+                router.goNamed(selectProject.name!);
+              }));
+            }
             return Container();
           }),
         );
@@ -156,21 +150,17 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute selectProject = GoRoute(
     name: "select-project",
     path: "select-project",
-    redirect: (context, state) {
-      print("RUNNING GUARDS");
-      return Guard.guards(
-        context,
-        [
-          Guard.checkAuthenticated,
-          Guard.checkCguAccepted,
-          Guard.checkIsUser,
-          Guard.checkIsDev,
-          BackofficeGuard.checkHaveApp,
-        ],
-      );
-    },
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkAuthenticated,
+        Guard.checkCguAccepted,
+        Guard.checkIsUser,
+        Guard.checkIsDev,
+        BackofficeGuard.checkHaveApp,
+      ],
+    ),
     pageBuilder: (context, state) {
-      print("PAGE BUILDER SELECTPROJECT");
       return NoTransitionPage(
         key: state.pageKey,
         child: SelectProjectPage(),
@@ -179,7 +169,7 @@ class BackofficeNavigator extends CommonNavigator {
   );
 
   static final GoRouter router = GoRouter(
-    initialLocation: "/sign",
+    initialLocation: "/select-project",
     routes: [root],
   );
 }
