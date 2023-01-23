@@ -62,11 +62,23 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static GoRoute selectProject = GoRoute(
   name: &quot;select-project&quot;,
-  path: &quot;&#47;&quot;,
-  pageBuilder: (context, state) =&gt; NoTransitionPage(
-    key: state.pageKey,
-    child: SelectProjectPage(),
+  path: &quot;select-project&quot;,
+  redirect: (context, state) =&gt; Guard.guards(
+    context,
+    [
+      Guard.checkAuthenticated,
+      Guard.checkCguAccepted,
+      Guard.checkIsUser,
+      Guard.checkIsDev,
+      BackofficeGuard.checkHaveApp,
+    ],
   ),
+  pageBuilder: (context, state) {
+    return NoTransitionPage(
+      key: state.pageKey,
+      child: SelectProjectPage(),
+    );
+  },
 );
 
 </code></pre>
@@ -116,6 +128,7 @@
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/gitSettings.html">gitSettings</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/overview.html">overview</a></li>
+          <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/root.html">root</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/router.html">router</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject.html">selectProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/settings.html">settings</a></li>

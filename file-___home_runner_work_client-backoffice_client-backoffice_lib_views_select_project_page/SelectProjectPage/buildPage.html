@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the createState method from the SelectProjectPage class, for the Dart programming language.">
-  <title>createState method - SelectProjectPage class - select_project_page library - Dart API</title>
+  <meta name="description" content="API docs for the buildPage method from the SelectProjectPage class, for the Dart programming language.">
+  <title>buildPage method - SelectProjectPage class - select_project_page library - Dart API</title>
 
 
   
@@ -32,9 +32,9 @@
     <li><a href="../../index.html">client_backoffice</a></li>
     <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page-library.html">select_project_page</a></li>
     <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage-class.html">SelectProjectPage</a></li>
-    <li class="self-crumb">createState method</li>
+    <li class="self-crumb">buildPage method</li>
   </ol>
-  <div class="self-name">createState</div>
+  <div class="self-name">buildPage</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -45,20 +45,16 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-method">createState</span> method 
+<h1><span class="kind-method">buildPage</span> method 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
 </h1></div>
 
     <section class="multi-line-signature">
       
-<div>
-  <ol class="annotation-list">
-    <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
-  </ol>
-</div>
 
 <span class="returntype">dynamic</span>
-<span class="name ">createState</span>(<wbr>)
+<span class="name ">buildPage</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="buildPage-param-context"><span class="type-annotation">dynamic</span> <span class="parameter-name">context</span></span></li>
+</ol>)
 
       
 
@@ -69,8 +65,21 @@
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@override
-State&lt;StatefulWidget&gt; createState() =&gt; _SelectProjectPageState();</code></pre>
+  <pre class="language-dart"><code class="language-dart">Widget buildPage(BuildContext context) {
+  var theme = LenraTheme.of(context);
+
+  return LenraFlex(
+    direction: Axis.vertical,
+    spacing: 16,
+    children: [
+      Text(
+        &quot;My projects&quot;,
+        style: theme.lenraTextThemeData.headline2,
+      ),
+      ...context.read&lt;UserApplicationModel&gt;().userApps.map((app) =&gt; _ProjectRow(app: app))
+    ],
+  );
+}</code></pre>
 </section>
 
 
@@ -87,7 +96,7 @@ State&lt;StatefulWidget&gt; createState() =&gt; _SelectProjectPageState();</code
   <li><a href="../../index.html">client_backoffice</a></li>
   <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page-library.html">select_project_page</a></li>
   <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage-class.html">SelectProjectPage</a></li>
-  <li class="self-crumb">createState method</li>
+  <li class="self-crumb">buildPage method</li>
 </ol>
 
 
@@ -105,7 +114,8 @@ State&lt;StatefulWidget&gt; createState() =&gt; _SelectProjectPageState();</code
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
 
     <li class="section-title"><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage-class.html#instance-methods">Methods</a></li>
-    <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage/createState.html">createState</a></li>
+    <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage/build.html">build</a></li>
+    <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_views_select_project_page/SelectProjectPage/buildPage.html">buildPage</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
     <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
 

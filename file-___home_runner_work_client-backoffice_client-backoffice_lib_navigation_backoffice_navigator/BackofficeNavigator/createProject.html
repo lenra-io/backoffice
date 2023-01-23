@@ -62,17 +62,15 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static GoRoute createProject = GoRoute(
   name: &quot;create-project&quot;,
-  path: &quot;&#47;create-project&quot;,
+  path: &quot;create-project&quot;,
+  redirect: (context, state) =&gt; Guard.guards(context, [
+    Guard.checkAuthenticated,
+    Guard.checkCguAccepted,
+    Guard.checkIsUser,
+    Guard.checkIsDev,
+  ]),
   pageBuilder: (context, state) =&gt; NoTransitionPage(
-    child: PageGuard(
-      guards: [
-        Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
-        Guard.checkIsDev,
-      ],
-      child: CreateProjectPage(),
-    ),
+    child: CreateProjectPage(),
   ),
 );
 
@@ -123,6 +121,7 @@
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/gitSettings.html">gitSettings</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/overview.html">overview</a></li>
+          <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/root.html">root</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/router.html">router</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject.html">selectProject</a></li>
           <li><a href="../../file-___home_runner_work_client-backoffice_client-backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/settings.html">settings</a></li>
