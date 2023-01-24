@@ -31,6 +31,7 @@ class SelectProjectPage extends StatelessWidget {
     return LenraFlex(
       direction: Axis.vertical,
       spacing: 16,
+      scroll: true,
       children: [
         Text(
           "My projects",
