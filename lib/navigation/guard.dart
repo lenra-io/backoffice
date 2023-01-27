@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/models/user_application_model.dart';
-import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/navigator/guard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class BackofficeGuard extends Guard {
     };
   }
 
-  static void _toWelcome(context) {
-    CommonNavigator.go(context, BackofficeNavigator.welcome);
+  static String _toWelcome(context) {
+    return BackofficeNavigator.welcome.path;
   }
 }
