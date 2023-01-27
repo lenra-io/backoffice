@@ -61,8 +61,14 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">static final GoRouter router = GoRouter(
-  initialLocation: &quot;&#47;select-project&quot;,
-  routes: [root],
+  routes: [
+    CommonNavigator.authRoutes,
+    validationDev,
+    welcome,
+    createProject,
+    overview,
+    selectProject,
+  ],
 );
 
 </code></pre>
@@ -112,7 +118,6 @@
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/gitSettings.html">gitSettings</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/overview.html">overview</a></li>
-          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/root.html">root</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/router.html">router</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject.html">selectProject</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/settings.html">settings</a></li>
