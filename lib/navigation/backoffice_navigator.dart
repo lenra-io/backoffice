@@ -15,7 +15,7 @@ import 'package:go_router/go_router.dart';
 class BackofficeNavigator extends CommonNavigator {
   static GoRoute validationDev = GoRoute(
     name: "validation-dev",
-    path: "validation-dev",
+    path: "/validation-dev",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
       Guard.checkCguAccepted,
@@ -28,7 +28,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute welcome = GoRoute(
     name: "welcome",
-    path: "welcome",
+    path: "/welcome",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
       Guard.checkCguAccepted,
@@ -43,7 +43,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute createProject = GoRoute(
     name: "create-project",
-    path: "create-project",
+    path: "/create-project",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
       Guard.checkCguAccepted,
@@ -99,7 +99,7 @@ class BackofficeNavigator extends CommonNavigator {
 
   static GoRoute overview = GoRoute(
     name: "overview",
-    path: "app/:appId",
+    path: "/app/:appId",
     redirect: (context, state) => Guard.guards(
       context,
       [
@@ -121,35 +121,9 @@ class BackofficeNavigator extends CommonNavigator {
     routes: [settings],
   );
 
-  static GoRoute root = GoRoute(
-      name: "root",
-      path: "/",
-      pageBuilder: (context, state) {
-        return NoTransitionPage(
-          key: state.pageKey,
-          child: Builder(builder: (context) {
-            if (GoRouter.of(context).location == "/") {
-              WidgetsBinding.instance.addPostFrameCallback(((_) {
-                router.goNamed(selectProject.name!);
-              }));
-            }
-            return Container();
-          }),
-        );
-      },
-      routes: [
-        CommonNavigator.authRoutes,
-        // Onboarding & other pages
-        validationDev,
-        welcome,
-        createProject,
-        overview,
-        selectProject,
-      ]);
-
   static GoRoute selectProject = GoRoute(
     name: "select-project",
-    path: "select-project",
+    path: "/",
     redirect: (context, state) => Guard.guards(
       context,
       [
@@ -169,8 +143,14 @@ class BackofficeNavigator extends CommonNavigator {
   );
 
   static final GoRouter router = GoRouter(
-    initialLocation: "/select-project",
-    routes: [root],
+    routes: [
+      CommonNavigator.authRoutes,
+      validationDev,
+      welcome,
+      createProject,
+      overview,
+      selectProject,
+    ],
   );
 }
 
