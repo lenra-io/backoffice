@@ -84,11 +84,9 @@ packages:
   client_common:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "v1.0.0-beta.36"
-      resolved-ref: "4a0e53dd0ebca57361f8febd4d4444afc5eda39a"
-      url: "git@github.com:lenra-io/client-common.git"
-    source: git
+      path: "/home/emric/Documents/lenra/client-common"
+      relative: false
+    source: path
     version: "1.0.0"
   clock:
     dependency: transitive

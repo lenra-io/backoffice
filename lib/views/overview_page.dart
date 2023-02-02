@@ -89,8 +89,9 @@ class _OverviewPageState extends State<OverviewPage> {
       if (hasPendingDeployment) {
         timer = Timer(Duration(seconds: 5), () {
           deploymentModel.fetchDeployments(widget.appId).then((_) {
-            buildModel.fetchBuilds(widget.appId);
-            setState(() {});
+            buildModel.fetchBuilds(widget.appId).then((_) {
+              setState(() {});
+            });
           });
         });
       }
