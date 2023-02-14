@@ -3,6 +3,7 @@ import 'package:client_common/config/config.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/build_model.dart';
 import 'package:client_common/models/cgu_model.dart';
+import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/store_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class Backoffice extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
         ChangeNotifierProvider<BuildModel>(create: (context) => BuildModel()),
+        ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
         ChangeNotifierProvider<UserApplicationModel>(create: (context) => UserApplicationModel()),
         ChangeNotifierProvider<StoreModel>(create: (context) => StoreModel()),
         ChangeNotifierProvider<CguModel>(create: (context) => CguModel()),

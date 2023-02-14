@@ -4,8 +4,10 @@ import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/api/response_models/build_response.dart';
+import 'package:client_common/api/response_models/deployment_response.dart';
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/build_model.dart';
+import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/navigator/common_navigator.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,8 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   void initState() {
     var buildModel = context.read<BuildModel>();
+    var deploymentModel = context.read<DeploymentModel>();
+
     UserApplicationModel userApplicationModel = context.read<UserApplicationModel>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -41,6 +45,7 @@ class _OverviewPageState extends State<OverviewPage> {
             CommonNavigator.go(context, BackofficeNavigator.selectProject);
           } else {
             buildModel.fetchBuilds(widget.appId);
+            deploymentModel.fetchDeployments(widget.appId);
           }
         },
       );
@@ -57,14 +62,19 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   Widget build(BuildContext context) {
     var buildModel = context.read<BuildModel>();
+    var deploymentModel = context.read<DeploymentModel>();
+
     // A bit dirty
     if (app == null) return Center(child: CircularProgressIndicator());
 
     List<BuildResponse> builds =
         context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id));
+    List<DeploymentResponse> deployments = context.select<DeploymentModel, List<DeploymentResponse>>(
+        (deploymentModel) => deploymentModel.deploymentsForApp(app!.id));
+    print(deployments);
 
-    var hasPendingBuild = false;
-    var hasPublishedBuild = false;
+    var hasPendingDeployment = false;
+    var hasPublishedDeployment = false;
 
     if (builds.isNotEmpty) {
       builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
@@ -72,17 +82,23 @@ class _OverviewPageState extends State<OverviewPage> {
       // Check if there is a createBuildStatus that is currently fetching.
       var createBuildStatusFetching = buildModel.createBuildStatus[app!.id]?.isFetching() ?? false;
 
-      hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending) || createBuildStatusFetching;
+      hasPendingDeployment = deployments.any((deployment) =>
+              deployment.status == DeploymentStatus.waitingForBuild ||
+              deployment.status == DeploymentStatus.waitingForAppReady ||
+              deployment.status == DeploymentStatus.created) ||
+          createBuildStatusFetching;
 
-      if (hasPendingBuild) {
+      if (hasPendingDeployment) {
         timer = Timer(Duration(seconds: 5), () {
-          buildModel.fetchBuilds(widget.appId).then((_) {
-            setState(() {});
+          deploymentModel.fetchDeployments(widget.appId).then((_) {
+            buildModel.fetchBuilds(widget.appId).then((_) {
+              setState(() {});
+            });
           });
         });
       }
 
-      hasPublishedBuild = builds.any((build) => build.status == BuildStatus.success);
+      hasPublishedDeployment = deployments.any((deployment) => deployment.status == DeploymentStatus.success);
     }
 
     return BackofficePage(
@@ -90,16 +106,17 @@ class _OverviewPageState extends State<OverviewPage> {
       title: "Overview",
       actionWidget: LenraButton(
         text: "Publish my application",
-        disabled: hasPendingBuild,
+        disabled: hasPendingDeployment,
         onPressed: () => buildModel.createBuild(app!.id).then((_) {
           setState(() {});
         }),
       ),
-      child: buildPage(context, hasPublishedBuild, builds),
+      child: buildPage(context, hasPublishedDeployment, deployments, builds),
     );
   }
 
-  Widget buildPage(BuildContext context, bool hasPublishedBuild, List<BuildResponse> builds) {
+  Widget buildPage(
+      BuildContext context, bool hasPublishedBuild, List<DeploymentResponse> deployments, List<BuildResponse> builds) {
     var theme = LenraTheme.of(context);
 
     return LenraFlex(
@@ -137,12 +154,16 @@ class _OverviewPageState extends State<OverviewPage> {
                 child: Text("Build status"),
               ),
             ]),
-            if (builds.isNotEmpty) buildRow(context, builds.last),
-            if (builds.length >= 2 && builds.last.status == BuildStatus.pending)
-              buildRow(context, builds.reversed.elementAt(1)),
+            if (deployments.isNotEmpty)
+              buildRow(
+                  context, deployments.last, builds.firstWhere((element) => element.id == deployments.last.buildId)),
+            if (deployments.length >= 2 &&
+                deployments.last.status == DeploymentStatus.waitingForBuild &&
+                deployments.last.status == DeploymentStatus.waitingForAppReady)
+              buildRow(context, deployments.reversed.elementAt(1), builds.reversed.elementAt(1)),
           ],
         ),
-        if (builds.isEmpty)
+        if (deployments.isEmpty)
           Text(
             "Your application has not been built yet.\nClick “Publish my application” to create your first build.",
             style: theme.lenraTextThemeData.disabledBodyText,
@@ -152,15 +173,21 @@ class _OverviewPageState extends State<OverviewPage> {
     );
   }
 
-  Color colorFromStatus(BuildStatus status) {
+  Color colorFromStatus(DeploymentStatus status) {
     switch (status) {
-      case BuildStatus.success:
+      case DeploymentStatus.success:
         return LenraColorThemeData.lenraFunGreenPulse;
 
-      case BuildStatus.pending:
+      case DeploymentStatus.waitingForBuild:
         return LenraColorThemeData.lenraFunYellowPulse;
 
-      case BuildStatus.failure:
+      case DeploymentStatus.waitingForAppReady:
+        return LenraColorThemeData.lenraFunYellowPulse;
+
+      case DeploymentStatus.created:
+        return LenraColorThemeData.lenraGreyText;
+
+      case DeploymentStatus.failure:
         return LenraColorThemeData.lenraFunRedPulse;
 
       default:
@@ -168,15 +195,21 @@ class _OverviewPageState extends State<OverviewPage> {
     }
   }
 
-  String textFromStatus(BuildStatus status) {
+  String textFromStatus(DeploymentStatus status) {
     switch (status) {
-      case BuildStatus.success:
+      case DeploymentStatus.success:
         return "Published";
 
-      case BuildStatus.pending:
+      case DeploymentStatus.waitingForBuild:
         return "Building...";
 
-      case BuildStatus.failure:
+      case DeploymentStatus.waitingForAppReady:
+        return "Building...";
+
+      case DeploymentStatus.created:
+        return "Created";
+
+      case DeploymentStatus.failure:
         return "Failure";
 
       default:
@@ -184,14 +217,14 @@ class _OverviewPageState extends State<OverviewPage> {
     }
   }
 
-  TableRow buildRow(BuildContext context, BuildResponse buildResponse) {
+  TableRow buildRow(BuildContext context, DeploymentResponse deploymentResponse, BuildResponse buildResponse) {
     var theme = LenraTheme.of(context);
     return TableRow(children: [
       LenraTableCell(
         child: Text("#${buildResponse.buildNumber}"),
       ),
       LenraTableCell(
-        child: Text(DateFormat.yMMMMd().add_jm().format(buildResponse.insertedAt)),
+        child: Text(DateFormat.yMMMMd().add_jm().format(deploymentResponse.insertedAt)),
       ),
       LenraTableCell(
         child: LenraFlex(
@@ -200,10 +233,10 @@ class _OverviewPageState extends State<OverviewPage> {
           children: [
             Icon(
               Icons.circle,
-              color: colorFromStatus(buildResponse.status),
+              color: colorFromStatus(deploymentResponse.status),
               size: theme.baseSize,
             ),
-            Text(textFromStatus(buildResponse.status)),
+            Text(textFromStatus(deploymentResponse.status)),
           ],
         ),
       ),
