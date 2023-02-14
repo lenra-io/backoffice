@@ -83,7 +83,9 @@ class _OverviewPageState extends State<OverviewPage> {
       var createBuildStatusFetching = buildModel.createBuildStatus[app!.id]?.isFetching() ?? false;
 
       hasPendingDeployment = deployments.any((deployment) =>
-              deployment.status == DeploymentStatus.pending || deployment.status == DeploymentStatus.created) ||
+              deployment.status == DeploymentStatus.waitingForBuild ||
+              deployment.status == DeploymentStatus.waitingForAppReady ||
+              deployment.status == DeploymentStatus.created) ||
           createBuildStatusFetching;
 
       if (hasPendingDeployment) {
@@ -155,7 +157,9 @@ class _OverviewPageState extends State<OverviewPage> {
             if (deployments.isNotEmpty)
               buildRow(
                   context, deployments.last, builds.firstWhere((element) => element.id == deployments.last.buildId)),
-            if (deployments.length >= 2 && deployments.last.status == DeploymentStatus.pending)
+            if (deployments.length >= 2 &&
+                deployments.last.status == DeploymentStatus.waitingForBuild &&
+                deployments.last.status == DeploymentStatus.waitingForAppReady)
               buildRow(context, deployments.reversed.elementAt(1), builds.reversed.elementAt(1)),
           ],
         ),
@@ -174,7 +178,10 @@ class _OverviewPageState extends State<OverviewPage> {
       case DeploymentStatus.success:
         return LenraColorThemeData.lenraFunGreenPulse;
 
-      case DeploymentStatus.pending:
+      case DeploymentStatus.waitingForBuild:
+        return LenraColorThemeData.lenraFunYellowPulse;
+
+      case DeploymentStatus.waitingForAppReady:
         return LenraColorThemeData.lenraFunYellowPulse;
 
       case DeploymentStatus.created:
@@ -193,7 +200,10 @@ class _OverviewPageState extends State<OverviewPage> {
       case DeploymentStatus.success:
         return "Published";
 
-      case DeploymentStatus.pending:
+      case DeploymentStatus.waitingForBuild:
+        return "Building...";
+
+      case DeploymentStatus.waitingForAppReady:
         return "Building...";
 
       case DeploymentStatus.created:
