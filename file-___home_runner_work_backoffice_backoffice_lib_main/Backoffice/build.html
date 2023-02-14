@@ -77,6 +77,7 @@ Widget build(BuildContext context) {
     providers: [
       ChangeNotifierProvider&lt;AuthModel&gt;(create: (context) =&gt; AuthModel()),
       ChangeNotifierProvider&lt;BuildModel&gt;(create: (context) =&gt; BuildModel()),
+      ChangeNotifierProvider&lt;DeploymentModel&gt;(create: (context) =&gt; DeploymentModel()),
       ChangeNotifierProvider&lt;UserApplicationModel&gt;(create: (context) =&gt; UserApplicationModel()),
       ChangeNotifierProvider&lt;StoreModel&gt;(create: (context) =&gt; StoreModel()),
       ChangeNotifierProvider&lt;CguModel&gt;(create: (context) =&gt; CguModel()),
