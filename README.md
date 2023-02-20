@@ -24,9 +24,9 @@
     The Lenra Client Backoffice in Flutter.
     <br />
     <br />
-    <a href="https://github.com/lenra-io/client-backoffice/issues">Report Bug</a>
+    <a href="https://github.com/lenra-io/backoffice/issues">Report Bug</a>
     ·
-    <a href="https://github.com/lenra-io/client-backoffice/issues">Request Feature</a>
+    <a href="https://github.com/lenra-io/backoffice/issues">Request Feature</a>
   </p>
 </div>
 
@@ -89,21 +89,21 @@ Distributed under the **GPL** License. See [LICENSE](./LICENSE) for more informa
 
 Lenra - [@lenra_dev](https://twitter.com/lenra_dev) - contact@lenra.io
 
-Project Link: [https://github.com/lenra-io/client-backoffice](https://github.com/lenra-io/client-backoffice)
+Project Link: [https://github.com/lenra-io/backoffice](https://github.com/lenra-io/backoffice)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/lenra-io/client-backoffice.svg?style=for-the-badge
-[contributors-url]: https://github.com/lenra-io/client-backoffice/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/lenra-io/client-backoffice.svg?style=for-the-badge
-[forks-url]: https://github.com/lenra-io/client-backoffice/network/members
-[stars-shield]: https://img.shields.io/github/stars/lenra-io/client-backoffice.svg?style=for-the-badge
-[stars-url]: https://github.com/lenra-io/client-backoffice/stargazers
-[issues-shield]: https://img.shields.io/github/issues/lenra-io/client-backoffice.svg?style=for-the-badge
-[issues-url]: https://github.com/lenra-io/client-backoffice/issues
-[license-shield]: https://img.shields.io/github/license/lenra-io/client-backoffice.svg?style=for-the-badge
-[license-url]: https://github.com/lenra-io/client-backoffice/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/lenra-io/backoffice.svg?style=for-the-badge
+[contributors-url]: https://github.com/lenra-io/backoffice/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/lenra-io/backoffice.svg?style=for-the-badge
+[forks-url]: https://github.com/lenra-io/backoffice/network/members
+[stars-shield]: https://img.shields.io/github/stars/lenra-io/backoffice.svg?style=for-the-badge
+[stars-url]: https://github.com/lenra-io/backoffice/stargazers
+[issues-shield]: https://img.shields.io/github/issues/lenra-io/backoffice.svg?style=for-the-badge
+[issues-url]: https://github.com/lenra-io/backoffice/issues
+[license-shield]: https://img.shields.io/github/license/lenra-io/backoffice.svg?style=for-the-badge
+[license-url]: https://github.com/lenra-io/backoffice/blob/master/LICENSE
 
