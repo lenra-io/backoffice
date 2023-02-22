@@ -10,6 +10,7 @@ RUN chown -R 1001:0 /app
 USER 1001
 
 COPY entrypoint.sh /entrypoint.sh
+COPY nginx.conf /opt/bitnami/nginx/conf/server_blocks/
 
 COPY --chown=1001:0 build/web /app
 

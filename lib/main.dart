@@ -1,4 +1,5 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
+import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' show setUrlStrategyTo;
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/build_model.dart';
@@ -13,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
+  setUrlStrategyTo('path');
+
   Logger.root.level = Level.WARNING;
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
