@@ -17,6 +17,8 @@ dev_dependencies:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   lenra_components:
     git:
       url: git@github.com:lenra-io/lenra_components.git
