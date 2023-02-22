@@ -71,7 +71,6 @@ class _OverviewPageState extends State<OverviewPage> {
         context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id));
     List<DeploymentResponse> deployments = context.select<DeploymentModel, List<DeploymentResponse>>(
         (deploymentModel) => deploymentModel.deploymentsForApp(app!.id));
-    print(deployments);
 
     var hasPendingDeployment = false;
     var hasPublishedDeployment = false;
@@ -201,10 +200,10 @@ class _OverviewPageState extends State<OverviewPage> {
         return "Published";
 
       case DeploymentStatus.waitingForBuild:
-        return "Building...";
+        return "Waiting for build...";
 
       case DeploymentStatus.waitingForAppReady:
-        return "Building...";
+        return "Waiting for app ready...";
 
       case DeploymentStatus.created:
         return "Created";
