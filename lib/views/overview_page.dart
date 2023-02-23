@@ -203,7 +203,7 @@ class _OverviewPageState extends State<OverviewPage> {
         return "Waiting for build...";
 
       case DeploymentStatus.waitingForAppReady:
-        return "Waiting for app ready...";
+        return "Waiting for the app to be ready...";
 
       case DeploymentStatus.created:
         return "Created";
