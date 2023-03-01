@@ -74,6 +74,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
     var hasPendingDeployment = false;
     var hasPublishedDeployment = false;
+    var hasPendingBuild = false;
 
     if (builds.isNotEmpty) {
       builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
@@ -87,7 +88,9 @@ class _OverviewPageState extends State<OverviewPage> {
               deployment.status == DeploymentStatus.created) ||
           createBuildStatusFetching;
 
-      if (hasPendingDeployment) {
+      hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending);
+
+      if (hasPendingDeployment || hasPendingBuild) {
         timer = Timer(Duration(seconds: 5), () {
           deploymentModel.fetchDeployments(widget.appId).then((_) {
             buildModel.fetchBuilds(widget.appId).then((_) {
@@ -105,7 +108,7 @@ class _OverviewPageState extends State<OverviewPage> {
       title: "Overview",
       actionWidget: LenraButton(
         text: "Publish my application",
-        disabled: hasPendingDeployment,
+        disabled: hasPendingDeployment || hasPendingBuild,
         onPressed: () => buildModel.createBuild(app!.id).then((_) {
           setState(() {});
         }),
