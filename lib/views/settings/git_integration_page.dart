@@ -176,6 +176,7 @@ class _GitIntegrationPageState extends State<GitIntegrationPage> {
             .then((value) {
           context.read<UserApplicationModel>().fetchUserApplications().then((value) {
             setState(() {
+              selectedApp = context.read<UserApplicationModel>().getApp(widget.appId);
               isLoading = false;
             });
           });
