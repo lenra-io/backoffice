@@ -68,6 +68,10 @@ class _ProjectRowState extends State<_ProjectRow> {
     super.initState();
   }
 
+  Color colorFromVisibility(bool isPublic) {
+    return isPublic ? LenraColorThemeData.lenraFunGreenPulse : LenraColorThemeData.lenraFunRedPulse;
+  }
+
   Color colorFromStatus(BuildStatus status) {
     switch (status) {
       case BuildStatus.success:
@@ -120,7 +124,7 @@ class _ProjectRowState extends State<_ProjectRow> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         LenraStatusSticker(
-                          color: colorFromStatus(latestBuild?.status ?? BuildStatus.pending),
+                          color: colorFromVisibility(mainEnv!.mainEnv.isPublic),
                         ),
                         Text(mainEnv!.mainEnv.isPublic ? "Public" : "Private"),
                       ],
