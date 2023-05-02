@@ -72,22 +72,6 @@ class _ProjectRowState extends State<_ProjectRow> {
     return isPublic ? LenraColorThemeData.lenraFunGreenPulse : LenraColorThemeData.lenraFunRedPulse;
   }
 
-  Color colorFromStatus(BuildStatus status) {
-    switch (status) {
-      case BuildStatus.success:
-        return LenraColorThemeData.lenraFunGreenPulse;
-
-      case BuildStatus.pending:
-        return LenraColorThemeData.lenraFunYellowPulse;
-
-      case BuildStatus.failure:
-        return LenraColorThemeData.lenraFunRedPulse;
-
-      default:
-        return LenraColorThemeData.lenraFunRedPulse;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var theme = LenraTheme.of(context);
