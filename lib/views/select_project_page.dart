@@ -68,20 +68,8 @@ class _ProjectRowState extends State<_ProjectRow> {
     super.initState();
   }
 
-  Color colorFromStatus(BuildStatus status) {
-    switch (status) {
-      case BuildStatus.success:
-        return LenraColorThemeData.lenraFunGreenPulse;
-
-      case BuildStatus.pending:
-        return LenraColorThemeData.lenraFunYellowPulse;
-
-      case BuildStatus.failure:
-        return LenraColorThemeData.lenraFunRedPulse;
-
-      default:
-        return LenraColorThemeData.lenraFunRedPulse;
-    }
+  Color colorFromVisibility(bool isPublic) {
+    return isPublic ? LenraColorThemeData.lenraFunGreenPulse : LenraColorThemeData.lenraFunRedPulse;
   }
 
   @override
@@ -120,7 +108,7 @@ class _ProjectRowState extends State<_ProjectRow> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         LenraStatusSticker(
-                          color: colorFromStatus(latestBuild?.status ?? BuildStatus.pending),
+                          color: colorFromVisibility(mainEnv!.mainEnv.isPublic),
                         ),
                         Text(mainEnv!.mainEnv.isPublic ? "Public" : "Private"),
                       ],
