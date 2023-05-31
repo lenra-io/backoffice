@@ -59,8 +59,8 @@ class _ProjectRowState extends State<_ProjectRow> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      mainEnv = await context.read<UserApplicationModel>().getMainEnv(widget.app.id);
-      await context.read<BuildModel>().fetchBuilds(widget.app.id);
+      mainEnv = await context.read<UserApplicationModel>().getMainEnv(widget.app.id!);
+      await context.read<BuildModel>().fetchBuilds(widget.app.id!);
       setState(() {
         isInitialized = true;
       });
@@ -77,7 +77,7 @@ class _ProjectRowState extends State<_ProjectRow> {
     var theme = LenraTheme.of(context);
 
     if (isInitialized) {
-      BuildResponse? latestBuild = context.read<BuildModel>().latestBuildForApp(widget.app.id);
+      BuildResponse? latestBuild = context.read<BuildModel>().latestBuildForApp(widget.app.id!);
       return InkWell(
         onTap: () {
           CommonNavigator.go(context, BackofficeNavigator.overview, params: {"appId": widget.app.id.toString()});

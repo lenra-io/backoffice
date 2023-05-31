@@ -71,7 +71,7 @@ class BackofficeDrawer extends StatelessWidget {
                   icon: Icons.logout,
                   onPressed: () {
                     context.read<AuthModel>().logout().then((value) {
-                      CommonNavigator.go(context, CommonNavigator.login);
+                      CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
                     }).catchError((error) {
                       logger.warning(error);
                     });
@@ -123,7 +123,7 @@ class _ProjectMenuState extends State<_ProjectMenu> {
 
     if (mainEnv == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<UserApplicationModel>().getMainEnv(selectedApp.id);
+        context.read<UserApplicationModel>().getMainEnv(selectedApp.id!);
       });
       return SizedBox.shrink();
     }

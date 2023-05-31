@@ -163,7 +163,7 @@ class _GitIntegrationPageState extends State<GitIntegrationPage> {
         setState(() {
           isLoading = true;
         });
-        int selectedAppId = selectedApp!.id;
+        int selectedAppId = selectedApp!.id!;
         context
             .read<UserApplicationModel>()
             .updateApp(
