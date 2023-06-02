@@ -113,7 +113,7 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
         text: "Logout",
         onPressed: () {
           context.read<AuthModel>().logout().then((value) {
-            CommonNavigator.go(context, CommonNavigator.login);
+            CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
           }).catchError((error) {
             logger.warning(error);
           });

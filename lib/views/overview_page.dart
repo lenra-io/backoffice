@@ -68,9 +68,9 @@ class _OverviewPageState extends State<OverviewPage> {
     if (app == null) return Center(child: CircularProgressIndicator());
 
     List<BuildResponse> builds =
-        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id));
+        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id!));
     List<DeploymentResponse> deployments = context.select<DeploymentModel, List<DeploymentResponse>>(
-        (deploymentModel) => deploymentModel.deploymentsForApp(app!.id));
+        (deploymentModel) => deploymentModel.deploymentsForApp(app!.id!));
 
     var hasPendingDeployment = false;
     var hasPublishedDeployment = false;
@@ -109,7 +109,7 @@ class _OverviewPageState extends State<OverviewPage> {
       actionWidget: LenraButton(
         text: "Publish my application",
         disabled: hasPendingDeployment || hasPendingBuild,
-        onPressed: () => buildModel.createBuild(app!.id).then((_) {
+        onPressed: () => buildModel.createBuild(app!.id!).then((_) {
           setState(() {});
         }),
       ),
