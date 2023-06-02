@@ -125,7 +125,7 @@ Widget build(BuildContext context) {
                 icon: Icons.logout,
                 onPressed: () {
                   context.read&lt;AuthModel&gt;().logout().then((value) {
-                    CommonNavigator.go(context, CommonNavigator.login);
+                    CommonNavigator.go(context, CommonNavigator.sign, extra: {&quot;register&quot;: false});
                   }).catchError((error) {
                     logger.warning(error);
                   });
