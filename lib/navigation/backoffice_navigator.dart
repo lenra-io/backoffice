@@ -18,8 +18,6 @@ class BackofficeNavigator extends CommonNavigator {
     path: "/validation-dev",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsNotDev,
     ]),
     pageBuilder: (context, state) => NoTransitionPage(
       child: DevValidationPage(),
@@ -31,9 +29,6 @@ class BackofficeNavigator extends CommonNavigator {
     path: "/welcome",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsUser,
-      Guard.checkIsDev,
       Guard.checkNotHaveApp,
     ]),
     pageBuilder: (context, state) => NoTransitionPage(
@@ -46,9 +41,6 @@ class BackofficeNavigator extends CommonNavigator {
     path: "/create-project",
     redirect: (context, state) => Guard.guards(context, [
       Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsUser,
-      Guard.checkIsDev,
     ]),
     pageBuilder: (context, state) => NoTransitionPage(
       child: CreateProjectPage(),
@@ -104,9 +96,6 @@ class BackofficeNavigator extends CommonNavigator {
       context,
       [
         Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
-        Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
     ),
@@ -128,9 +117,6 @@ class BackofficeNavigator extends CommonNavigator {
       context,
       [
         Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
-        Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
     ),

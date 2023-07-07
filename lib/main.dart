@@ -7,6 +7,7 @@ import 'package:client_common/models/cgu_model.dart';
 import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/store_model.dart';
 import 'package:client_common/models/user_application_model.dart';
+import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
@@ -45,6 +46,13 @@ class Backoffice extends StatelessWidget {
     var themeData = LenraThemeData();
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<OAuthModel>(
+          create: (context) => OAuthModel(
+            '604adb70-20f9-4b2a-b7b2-233f86a04976',
+            'http://localhost:10000/redirect.html',
+            scopes: ['manage:account', 'manage:apps', 'store'],
+          ),
+        ),
         ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
         ChangeNotifierProvider<BuildModel>(create: (context) => BuildModel()),
         ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
