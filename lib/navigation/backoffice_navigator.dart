@@ -1,6 +1,5 @@
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
-import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
@@ -13,17 +12,6 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class BackofficeNavigator extends CommonNavigator {
-  static GoRoute validationDev = GoRoute(
-    name: "validation-dev",
-    path: "/validation-dev",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
-    ]),
-    pageBuilder: (context, state) => NoTransitionPage(
-      child: DevValidationPage(),
-    ),
-  );
-
   static GoRoute welcome = GoRoute(
     name: "welcome",
     path: "/welcome",
@@ -131,7 +119,6 @@ class BackofficeNavigator extends CommonNavigator {
   static final GoRouter router = GoRouter(
     routes: [
       CommonNavigator.authRoutes,
-      validationDev,
       welcome,
       createProject,
       overview,

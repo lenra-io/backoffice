@@ -3,7 +3,6 @@ import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' sho
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/build_model.dart';
-import 'package:client_common/models/cgu_model.dart';
 import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/store_model.dart';
 import 'package:client_common/models/user_application_model.dart';
@@ -48,7 +47,7 @@ class Backoffice extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<OAuthModel>(
           create: (context) => OAuthModel(
-            '604adb70-20f9-4b2a-b7b2-233f86a04976',
+            'e4c62c88-1f7e-4480-80a7-cc72ea5dff95',
             'http://localhost:10000/redirect.html',
             scopes: ['manage:account', 'manage:apps', 'store'],
           ),
@@ -58,7 +57,6 @@ class Backoffice extends StatelessWidget {
         ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
         ChangeNotifierProvider<UserApplicationModel>(create: (context) => UserApplicationModel()),
         ChangeNotifierProvider<StoreModel>(create: (context) => StoreModel()),
-        ChangeNotifierProvider<CguModel>(create: (context) => CguModel()),
       ],
       builder: (BuildContext context, _) => LenraTheme(
         themeData: themeData,
