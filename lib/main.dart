@@ -1,3 +1,4 @@
+import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' show setUrlStrategyTo;
 import 'package:client_common/config/config.dart';
@@ -7,6 +8,8 @@ import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/store_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/oauth/oauth_model.dart';
+import 'package:client_common/views/auth/oauth_page.dart';
+import 'package:client_common/views/lenra_report_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
@@ -25,17 +28,21 @@ void main() async {
   // TODO: Récupération de variables d'environnement ne doit pas marcher
   const environment = String.fromEnvironment('ENVIRONMENT');
 
-  if (environment == "production" || environment == "staging") {
-    String sentryDsn = Config.instance.sentryDsn;
-    await SentryFlutter.init(
-      (options) => options
-        ..dsn = sentryDsn
-        ..environment = environment,
-      appRunner: () => runApp(Backoffice()),
-    );
-  } else {
-    runApp(Backoffice());
-  }
+  CatcherOptions debugOptions = CatcherOptions(
+    LenraReportMode(),
+    environment == "production" || environment == "staging"
+        ? [
+            SentryHandler(
+              SentryClient(SentryOptions(dsn: Config.instance.sentryDsn)..environment = environment),
+            ),
+          ]
+        : [],
+  );
+
+  Catcher(
+    debugConfig: debugOptions,
+    rootWidget: Backoffice(),
+  );
 }
 
 class Backoffice extends StatelessWidget {
@@ -43,29 +50,35 @@ class Backoffice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeData = LenraThemeData();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<OAuthModel>(
-          create: (context) => OAuthModel(
-            'e4c62c88-1f7e-4480-80a7-cc72ea5dff95',
-            'http://localhost:10000/redirect.html',
-            scopes: ['manage:account', 'manage:apps', 'store'],
+    return Container(
+      color: Colors.white,
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<OAuthModel>(
+            create: (context) => OAuthModel(
+              '81c40207-6dde-4b9b-9c3f-7b4811a059e1',
+              'http://localhost:10000/redirect.html',
+              scopes: ['manage:account', 'manage:apps', 'store', 'profile', 'resources'],
+            ),
           ),
-        ),
-        ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
-        ChangeNotifierProvider<BuildModel>(create: (context) => BuildModel()),
-        ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
-        ChangeNotifierProvider<UserApplicationModel>(create: (context) => UserApplicationModel()),
-        ChangeNotifierProvider<StoreModel>(create: (context) => StoreModel()),
-      ],
-      builder: (BuildContext context, _) => LenraTheme(
-        themeData: themeData,
-        child: MaterialApp.router(
-          routerConfig: BackofficeNavigator.router,
-          title: 'Lenra',
-          theme: ThemeData(
-            visualDensity: VisualDensity.standard,
-            textTheme: TextTheme(bodyText2: themeData.lenraTextThemeData.bodyText),
+          ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
+          ChangeNotifierProvider<BuildModel>(create: (context) => BuildModel()),
+          ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
+          ChangeNotifierProvider<UserApplicationModel>(create: (context) => UserApplicationModel()),
+          ChangeNotifierProvider<StoreModel>(create: (context) => StoreModel()),
+        ],
+        builder: (BuildContext context, _) => LenraTheme(
+          themeData: themeData,
+          child: MaterialApp.router(
+            routerConfig: BackofficeNavigator.router,
+            title: 'Lenra',
+            theme: ThemeData(
+              visualDensity: VisualDensity.standard,
+              textTheme: TextTheme(bodyMedium: themeData.lenraTextThemeData.bodyText),
+            ),
+            builder: (context, widget) {
+              return OAuthPage(child: widget!);
+            },
           ),
         ),
       ),

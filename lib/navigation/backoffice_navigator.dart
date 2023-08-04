@@ -1,3 +1,4 @@
+import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
@@ -16,7 +17,6 @@ class BackofficeNavigator extends CommonNavigator {
     name: "welcome",
     path: "/welcome",
     redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
       Guard.checkNotHaveApp,
     ]),
     pageBuilder: (context, state) => NoTransitionPage(
@@ -27,9 +27,6 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute createProject = GoRoute(
     name: "create-project",
     path: "/create-project",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
-    ]),
     pageBuilder: (context, state) => NoTransitionPage(
       child: CreateProjectPage(),
     ),
@@ -83,7 +80,6 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkAuthenticated,
         BackofficeGuard.checkHaveApp,
       ],
     ),
@@ -104,7 +100,6 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkAuthenticated,
         BackofficeGuard.checkHaveApp,
       ],
     ),
@@ -117,6 +112,7 @@ class BackofficeNavigator extends CommonNavigator {
   );
 
   static final GoRouter router = GoRouter(
+    navigatorKey: Catcher.navigatorKey,
     routes: [
       CommonNavigator.authRoutes,
       welcome,

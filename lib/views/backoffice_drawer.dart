@@ -71,7 +71,8 @@ class BackofficeDrawer extends StatelessWidget {
                   icon: Icons.logout,
                   onPressed: () {
                     context.read<AuthModel>().logout().then((value) {
-                      CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
+                      // TODO: Fix this
+                      // CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
                     }).catchError((error) {
                       logger.warning(error);
                     });
