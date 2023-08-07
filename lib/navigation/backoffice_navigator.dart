@@ -1,6 +1,7 @@
 import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
+import 'package:client_backoffice/views/dev_validation_page.dart';
 import 'package:client_backoffice/views/overview_page.dart';
 import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
@@ -13,10 +14,24 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class BackofficeNavigator extends CommonNavigator {
+  static GoRoute validationDev = GoRoute(
+    name: "validation-dev",
+    path: "/validation-dev",
+    redirect: (context, state) => Guard.guards(context, [
+      Guard.checkIsAuthenticated,
+      Guard.checkIsNotDev,
+    ]),
+    pageBuilder: (context, state) => NoTransitionPage(
+      child: DevValidationPage(),
+    ),
+  );
+
   static GoRoute welcome = GoRoute(
     name: "welcome",
     path: "/welcome",
     redirect: (context, state) => Guard.guards(context, [
+      Guard.checkIsAuthenticated,
+      Guard.checkIsDev,
       Guard.checkNotHaveApp,
     ]),
     pageBuilder: (context, state) => NoTransitionPage(
@@ -27,6 +42,10 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute createProject = GoRoute(
     name: "create-project",
     path: "/create-project",
+    redirect: (context, state) => Guard.guards(context, [
+      Guard.checkIsAuthenticated,
+      Guard.checkIsDev,
+    ]),
     pageBuilder: (context, state) => NoTransitionPage(
       child: CreateProjectPage(),
     ),
@@ -80,6 +99,8 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
     ),
@@ -100,6 +121,8 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
     ),
@@ -111,10 +134,11 @@ class BackofficeNavigator extends CommonNavigator {
     },
   );
 
-  static final GoRouter router = GoRouter(
+  static GoRouter router = GoRouter(
     navigatorKey: Catcher.navigatorKey,
     routes: [
       CommonNavigator.authRoutes,
+      validationDev,
       welcome,
       createProject,
       overview,
