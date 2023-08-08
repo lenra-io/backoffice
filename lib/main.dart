@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' show setUrlStrategyTo;
@@ -26,24 +28,64 @@ void main() async {
   debugPrint("Starting main app[debugPrint]: ${Config.instance.application}");
 
   const environment = String.fromEnvironment('ENVIRONMENT');
-
+  var reportMode = LenraReportMode();
   CatcherOptions debugOptions = CatcherOptions(
-      LenraReportMode(),
-      environment == "production" || environment == "staging"
-          ? [
-              SentryHandler(
-                SentryClient(SentryOptions(dsn: Config.instance.sentryDsn)..environment = environment),
-              ),
-            ]
-          : [],
-      explicitExceptionReportModesMap: {
-        "IgnoreError": SilentReportMode(),
-      });
+    reportMode,
+    environment == "production" || environment == "staging"
+        ? [
+            SentryHandler(
+              SentryClient(SentryOptions(dsn: Config.instance.sentryDsn)..environment = environment),
+            ),
+          ]
+        : [],
+    reportOccurrenceTimeout: 100,
+  );
 
   Catcher(
     debugConfig: debugOptions,
-    rootWidget: Backoffice(),
+    rootWidget: ErrorHandler(streamController: reportMode.streamController, child: Backoffice()),
   );
+}
+
+class ErrorHandler extends StatelessWidget {
+  final Widget child;
+  final StreamController<dynamic> streamController;
+
+  const ErrorHandler({Key? key, required this.child, required this.streamController}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
+          if (snapshot.hasData) {
+            return MaterialApp(
+              home: Scaffold(
+                body: Center(
+                  child: Flex(
+                    direction: Axis.vertical,
+                    children: [
+                      Text(snapshot.data.toString()),
+                      TextButton(
+                        onPressed: () {
+                          streamController.add(null);
+                        },
+                        child: Text("Retry"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+          return child;
+        },
+        stream: streamController.stream);
+  }
 }
 
 class Backoffice extends StatelessWidget {
@@ -58,7 +100,7 @@ class Backoffice extends StatelessWidget {
           providers: [
             ChangeNotifierProvider<OAuthModel>(
               create: (context) => OAuthModel(
-                '8c7186cc-940d-4577-8c5a-9dfccf034358',
+                '46d96ae1-a6f2-4f70-95ab-9960f64923d9',
                 'http://localhost:10000/redirect.html',
                 scopes: ['manage:account', 'manage:apps', 'store', 'profile', 'resources'],
               ),
