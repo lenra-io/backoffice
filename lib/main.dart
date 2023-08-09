@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' show setUrlStrategyTo;
+import 'package:client_common/api/response_models/api_error.dart';
 import 'package:client_common/config/config.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/build_model.dart';
@@ -11,6 +12,7 @@ import 'package:client_common/models/store_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/oauth/oauth_model.dart';
 import 'package:client_common/views/lenra_report_mode.dart';
+import 'package:client_common/views/simple_page.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
@@ -56,35 +58,60 @@ class ErrorHandler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          }
-          if (snapshot.hasData) {
-            return MaterialApp(
-              home: Scaffold(
-                body: Center(
-                  child: Flex(
-                    direction: Axis.vertical,
-                    children: [
-                      Text(snapshot.data.toString()),
-                      TextButton(
-                        onPressed: () {
-                          streamController.add(null);
-                        },
-                        child: Text("Retry"),
-                      ),
-                    ],
-                  ),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        }
+        if (snapshot.hasData) {
+          var themeData = LenraThemeData();
+          return LenraTheme(
+            themeData: themeData,
+            child: MaterialApp(
+              theme: ThemeData(
+                visualDensity: VisualDensity.standard,
+                textTheme: TextTheme(bodyMedium: themeData.lenraTextThemeData.bodyText),
+              ),
+              home: SimplePage(
+                title: getErrorTitle(snapshot.data),
+                message: getErrorMessage(snapshot.data),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        streamController.add(null);
+                      },
+                      child: Text("Retry"),
+                    ),
+                  ],
                 ),
               ),
-            );
-          }
-          return child;
-        },
-        stream: streamController.stream);
+            ),
+          );
+        }
+        return child;
+      },
+      stream: streamController.stream,
+    );
+  }
+
+  String getErrorTitle(dynamic error) {
+    if (error is ApiError) {
+      return "Connection lost!";
+    } else {
+      return "Unknown error";
+    }
+  }
+
+  String getErrorMessage(dynamic error) {
+    if (error is ApiError) {
+      return "It looks like you lost connection to the server. Please check your internet connection and try again.";
+    } else {
+      return "An unknown error occured. If the error persists, please contact us at contact@lenra.io.";
+    }
   }
 }
 
@@ -100,7 +127,7 @@ class Backoffice extends StatelessWidget {
           providers: [
             ChangeNotifierProvider<OAuthModel>(
               create: (context) => OAuthModel(
-                '46d96ae1-a6f2-4f70-95ab-9960f64923d9',
+                '0c746026-25a1-4a80-b226-8d0c9b2f3244',
                 'http://localhost:10000/redirect.html',
                 scopes: ['manage:account', 'manage:apps', 'store', 'profile', 'resources'],
               ),
