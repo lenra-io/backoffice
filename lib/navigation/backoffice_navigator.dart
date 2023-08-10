@@ -17,10 +17,14 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute validationDev = GoRoute(
     name: "validation-dev",
     path: "/validation-dev",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkIsAuthenticated,
-      Guard.checkIsNotDev,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsNotDev,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: DevValidationPage(),
     ),
@@ -29,11 +33,15 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute welcome = GoRoute(
     name: "welcome",
     path: "/welcome",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkIsAuthenticated,
-      Guard.checkIsDev,
-      Guard.checkNotHaveApp,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
+        Guard.checkNotHaveApp,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: WelcomeDevPage(),
     ),
@@ -42,10 +50,14 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute createProject = GoRoute(
     name: "create-project",
     path: "/create-project",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkIsAuthenticated,
-      Guard.checkIsDev,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: CreateProjectPage(),
     ),
@@ -103,6 +115,7 @@ class BackofficeNavigator extends CommonNavigator {
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
+      metadata: {"initialRoute": state.location},
     ),
     pageBuilder: (context, state) {
       return NoTransitionPage(
@@ -125,6 +138,7 @@ class BackofficeNavigator extends CommonNavigator {
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
+      metadata: {"initialRoute": state.location},
     ),
     pageBuilder: (context, state) {
       return NoTransitionPage(

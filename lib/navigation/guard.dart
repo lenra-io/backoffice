@@ -12,8 +12,8 @@ class BackofficeGuard extends Guard {
 
   static final BackofficeGuard checkHaveApp = BackofficeGuard(isValid: _haveApp(true), onInvalid: _toWelcome);
 
-  static Future<bool> Function(BuildContext) _haveApp(bool mustHaveApp) {
-    return (BuildContext context) async {
+  static Future<bool> Function(BuildContext, Map<String, dynamic>?) _haveApp(bool mustHaveApp) {
+    return (BuildContext context, Map<String, dynamic>? metadata) async {
       try {
         List<AppResponse> userApps = await context.read<UserApplicationModel>().fetchUserApplications();
         return userApps.isNotEmpty == mustHaveApp;
