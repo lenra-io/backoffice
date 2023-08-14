@@ -129,7 +129,7 @@ class Backoffice extends StatelessWidget {
               create: (context) => OAuthModel(
                 const String.fromEnvironment('OAUTH_CLIENT_ID'),
                 'http://localhost:10000/redirect.html',
-                scopes: ['profile", "store", "manage:account", "manage:apps'],
+                scopes: ['profile', 'store', 'manage:account', 'manage:apps'],
               ),
             ),
             ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
