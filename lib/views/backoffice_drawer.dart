@@ -7,7 +7,6 @@ import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,7 +17,6 @@ class BackofficeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logger = Logger('BackofficeSideMenu');
     var theme = LenraTheme.of(context);
     return Drawer(
       width: 196,
