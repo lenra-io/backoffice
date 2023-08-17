@@ -93,9 +93,11 @@ packages:
   client_common:
     dependency: "direct main"
     description:
-      path: "../client-common"
-      relative: true
-    source: path
+      path: "."
+      ref: "v1.0.0-alpha.1"
+      resolved-ref: e861c16762a32f835cc568a02678f1269ecf25ec
+      url: "https://github.com/lenra-io/client-common.git"
+    source: git
     version: "1.0.0"
   clock:
     dependency: transitive
