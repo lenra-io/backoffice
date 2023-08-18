@@ -115,11 +115,27 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           LenraButton(
-                              onPressed: () {
-                                Navigator.pop(context);
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            text: "Cancel",
+                          ),
+                          LenraButton(
+                              onPressed: () async {
+                                GetMainEnvResponse res =
+                                    await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+
+                                var res2 = await LenraApi.instance.post(
+                                  '/environments/${res.mainEnv.id}/oauth2',
+                                  body: {
+                                    'name': 'test',
+                                    'scopes': ['manage:apps'],
+                                    'redirect_uris': ['http://localhost:10000/redirect.html'],
+                                    'allowed_origins': ['http://localhost:10000']
+                                  },
+                                );
                               },
-                              text: "Cancel"),
-                          LenraButton(onPressed: () {}, text: "Save"),
+                              text: "Save"),
                         ],
                       )
                     ],
