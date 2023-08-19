@@ -53,12 +53,21 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                 Flex(
                   direction: Axis.vertical,
                   children: snapshot.data!.clients.map((client) {
-                    return Text("A client");
+                    return Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Text(client.name),
+                        Text(client.clientId),
+                        Text(client.allowedOrigins.toString()),
+                      ],
+                    );
                   }).toList(),
                 ),
               ],
             );
           }
+
+          print(snapshot.error);
 
           return CircularProgressIndicator();
         });
@@ -121,21 +130,26 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                             text: "Cancel",
                           ),
                           LenraButton(
-                              onPressed: () async {
-                                GetMainEnvResponse res =
-                                    await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+                            onPressed: () async {
+                              GetMainEnvResponse res =
+                                  await context.read<UserApplicationModel>().getMainEnv(widget.appId);
 
-                                var res2 = await LenraApi.instance.post(
-                                  '/environments/${res.mainEnv.id}/oauth2',
-                                  body: {
-                                    'name': 'test',
-                                    'scopes': ['manage:apps'],
-                                    'redirect_uris': ['http://localhost:10000/redirect.html'],
-                                    'allowed_origins': ['http://localhost:10000']
-                                  },
-                                );
-                              },
-                              text: "Save"),
+                              await LenraApi.instance.post(
+                                '/environments/${res.mainEnv.id}/oauth2',
+                                body: {
+                                  'name': 'test',
+                                  'scopes': ['manage:apps'],
+                                  'redirect_uris': ['http://localhost:10000/redirect.html'],
+                                  'allowed_origins': ['http://localhost:10000']
+                                },
+                              );
+
+                              Navigator.pop(context);
+
+                              setState(() {});
+                            },
+                            text: "Save",
+                          ),
                         ],
                       )
                     ],

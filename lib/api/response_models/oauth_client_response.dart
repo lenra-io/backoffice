@@ -4,9 +4,9 @@ class OAuthClientResponse extends ApiResponse {
   String clientId;
   int environmentId;
   String name;
-  List<String> scopes;
-  List<String> redirectUris;
-  List<String> allowedOrigins;
+  List<dynamic> scopes;
+  List<dynamic> redirectUris;
+  List<dynamic> allowedOrigins;
 
   OAuthClientResponse.fromJson(Map<String, dynamic> json)
       : clientId = json["oauth2_client_id"],
