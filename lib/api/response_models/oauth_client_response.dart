@@ -18,7 +18,10 @@ class OAuthClientResponse extends ApiResponse {
 
   @override
   bool operator ==(Object other) {
-    return other is OAuthClientResponse && other.clientId == clientId;
+    return other is OAuthClientResponse &&
+        other.clientId == clientId &&
+        other.environmentId == environmentId &&
+        other.name == name;
   }
 
   @override
