@@ -1,9 +1,10 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
-import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/navigator/common_navigator.dart';
+import 'package:client_common/oauth/oauth_model.dart';
 import 'package:client_common/views/loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -111,12 +112,9 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
     } else {
       return LenraButton(
         text: "Logout",
-        onPressed: () {
-          context.read<AuthModel>().logout().then((value) {
-            CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
-          }).catchError((error) {
-            logger.warning(error);
-          });
+        onPressed: () async {
+          await context.read<OAuthModel>().helper.disconnect();
+          context.go("/");
         },
         type: LenraComponentType.secondary,
       );

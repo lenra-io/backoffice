@@ -1,13 +1,12 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_common/api/response_models/app_response.dart';
 import 'package:client_common/api/response_models/environment_response.dart';
-import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/navigator/common_navigator.dart';
+import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
-import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,7 +17,6 @@ class BackofficeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logger = Logger('BackofficeSideMenu');
     var theme = LenraTheme.of(context);
     return Drawer(
       width: 196,
@@ -69,12 +67,9 @@ class BackofficeDrawer extends StatelessWidget {
                 BackofficeSideMenuItem(
                   "Logout",
                   icon: Icons.logout,
-                  onPressed: () {
-                    context.read<AuthModel>().logout().then((value) {
-                      CommonNavigator.go(context, CommonNavigator.sign, extra: {"register": false});
-                    }).catchError((error) {
-                      logger.warning(error);
-                    });
+                  onPressed: () async {
+                    await context.read<OAuthModel>().helper.disconnect();
+                    context.go("/");
                   },
                 ),
                 BackofficeSideMenuItem(

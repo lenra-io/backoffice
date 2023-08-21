@@ -30,7 +30,7 @@ class _DevValidationPageState extends State<DevValidationPage> {
 
     return SimplePage(
       title: "Thank you for your registration",
-      message: "Great things are about to happen! Do you confirm that want to access our developer platform ?",
+      message: "Great things are about to happen! Do you confirm that you want to access our developer platform ?",
       child: LenraFlex(
         direction: Axis.vertical,
         fillParent: true,
@@ -77,8 +77,6 @@ class _DevValidationPageState extends State<DevValidationPage> {
   void validateDev() {
     context.read<AuthModel>().validateDev().then((_) {
       CommonNavigator.go(context, BackofficeNavigator.welcome);
-    }).catchError((error) {
-      logger.warning(error);
     });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:catcher/catcher.dart';
 import 'package:client_backoffice/navigation/guard.dart';
 import 'package:client_backoffice/views/create_project_page.dart';
 import 'package:client_backoffice/views/dev_validation_page.dart';
@@ -16,11 +17,14 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute validationDev = GoRoute(
     name: "validation-dev",
     path: "/validation-dev",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsNotDev,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsNotDev,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: DevValidationPage(),
     ),
@@ -29,13 +33,15 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute welcome = GoRoute(
     name: "welcome",
     path: "/welcome",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsUser,
-      Guard.checkIsDev,
-      Guard.checkNotHaveApp,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
+        Guard.checkNotHaveApp,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: WelcomeDevPage(),
     ),
@@ -44,12 +50,14 @@ class BackofficeNavigator extends CommonNavigator {
   static GoRoute createProject = GoRoute(
     name: "create-project",
     path: "/create-project",
-    redirect: (context, state) => Guard.guards(context, [
-      Guard.checkAuthenticated,
-      Guard.checkCguAccepted,
-      Guard.checkIsUser,
-      Guard.checkIsDev,
-    ]),
+    redirect: (context, state) => Guard.guards(
+      context,
+      [
+        Guard.checkIsAuthenticated,
+        Guard.checkIsDev,
+      ],
+      metadata: {"initialRoute": state.location},
+    ),
     pageBuilder: (context, state) => NoTransitionPage(
       child: CreateProjectPage(),
     ),
@@ -103,12 +111,11 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
+        Guard.checkIsAuthenticated,
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
+      metadata: {"initialRoute": state.location},
     ),
     pageBuilder: (context, state) {
       return NoTransitionPage(
@@ -127,12 +134,11 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkAuthenticated,
-        Guard.checkCguAccepted,
-        Guard.checkIsUser,
+        Guard.checkIsAuthenticated,
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
+      metadata: {"initialRoute": state.location},
     ),
     pageBuilder: (context, state) {
       return NoTransitionPage(
@@ -142,7 +148,8 @@ class BackofficeNavigator extends CommonNavigator {
     },
   );
 
-  static final GoRouter router = GoRouter(
+  static GoRouter router = GoRouter(
+    navigatorKey: Catcher.navigatorKey,
     routes: [
       CommonNavigator.authRoutes,
       validationDev,
