@@ -44,6 +44,11 @@ class SettingsPage extends StatelessWidget {
                 "Manage access",
                 BackofficeNavigator.accessSettings,
               ),
+              createSubMenuItem(
+                context,
+                "External clients",
+                BackofficeNavigator.oauthSettings,
+              )
             ],
           ),
         ),

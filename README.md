@@ -51,7 +51,7 @@ mix create_oauth2_client backoffice
 
 Run flutter app with chrome
 ```sh
-flutter run -d chrome --web-port 10000 --dart-define=LENRA_SERVER_URL=http://localhost:4000 --dart-define=OAUTH_CLIENT_ID=6c434f76-9917-4856-901b-f723fe45446c
+flutter run -d chrome --web-port 10000 --dart-define=LENRA_SERVER_URL=http://localhost:4000 --dart-define=OAUTH_CLIENT_ID=<client_id_from_the_previous_cmd>
 ```
 
 Run flutter test
