@@ -169,7 +169,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
 
   Widget buildDialog({OAuthClientResponse? client}) {
     final GlobalKey<TooltipState> tooltipKey = GlobalKey<TooltipState>();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     final nameController = TextEditingController();
     final redirectUrisController = TextEditingController();
@@ -190,7 +190,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
           width: 400,
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: IntrinsicHeight(
                 child: Column(
                   children: [
@@ -275,7 +275,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                         SizedBox(width: 16),
                         LenraButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                            if (formKey.currentState!.validate()) {
                               GetMainEnvResponse res =
                                   await context.read<UserApplicationModel>().getMainEnv(widget.appId);
 
