@@ -285,8 +285,10 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                                   body: {
                                     'name': nameController.text,
                                     'scopes': ['manage:apps'],
-                                    'redirect_uris': redirectUrisController.text.split('\n').map((e) => e.trim()),
-                                    'allowed_origins': allowedOriginsController.text.split('\n').map((e) => e.trim()),
+                                    'redirect_uris':
+                                        redirectUrisController.text.split('\n').map((e) => e.trim()).toList(),
+                                    'allowed_origins':
+                                        allowedOriginsController.text.split('\n').map((e) => e.trim()).toList(),
                                   },
                                 );
                               } else {
