@@ -128,7 +128,7 @@ class Backoffice extends StatelessWidget {
             ChangeNotifierProvider<OAuthModel>(
               create: (context) => OAuthModel(
                 Config.instance.oauthClientId,
-                'http://localhost:10000/redirect.html',
+                Config.instance.oauthRedirectUrl,
                 scopes: ['profile', 'store', 'manage:account', 'manage:apps'],
               ),
             ),
