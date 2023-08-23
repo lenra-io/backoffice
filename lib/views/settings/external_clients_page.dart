@@ -284,7 +284,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                                   '/environments/${res.mainEnv.id}/oauth2',
                                   body: {
                                     'name': nameController.text,
-                                    'scopes': ['manage:apps'],
+                                    'scopes': ['app:websocket'],
                                     'redirect_uris':
                                         redirectUrisController.text.split('\n').map((e) => e.trim()).toList(),
                                     'allowed_origins':
@@ -296,7 +296,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                                   '/environments/${res.mainEnv.id}/oauth2/${client.clientId}',
                                   body: {
                                     'name': nameController.text,
-                                    'scopes': ['manage:apps'],
+                                    'scopes': ['app:websocket'],
                                     'redirect_uris': redirectUrisController.text.split('\n'),
                                     'allowed_origins': allowedOriginsController.text.split('\n')
                                   },
