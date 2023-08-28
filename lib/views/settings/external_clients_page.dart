@@ -303,7 +303,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
                                 );
                               }
 
-                              Navigator.pop(context);
+                              Navigator.of(context, rootNavigator: true).pop();
 
                               setState(() {});
                             }
