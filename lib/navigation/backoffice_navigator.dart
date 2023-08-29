@@ -28,7 +28,7 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkIsAuthenticated,
+        BackofficeGuard.checkIsAuthenticated,
         Guard.checkIsNotDev,
       ],
       metadata: {"initialRoute": state.location},
@@ -44,7 +44,7 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkIsAuthenticated,
+        BackofficeGuard.checkIsAuthenticated,
         Guard.checkIsDev,
         Guard.checkNotHaveApp,
       ],
@@ -61,7 +61,7 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkIsAuthenticated,
+        BackofficeGuard.checkIsAuthenticated,
         Guard.checkIsDev,
       ],
       metadata: {"initialRoute": state.location},
@@ -133,7 +133,7 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkIsAuthenticated,
+        BackofficeGuard.checkIsAuthenticated,
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
@@ -156,7 +156,7 @@ class BackofficeNavigator extends CommonNavigator {
     redirect: (context, state) => Guard.guards(
       context,
       [
-        Guard.checkIsAuthenticated,
+        BackofficeGuard.checkIsAuthenticated,
         Guard.checkIsDev,
         BackofficeGuard.checkHaveApp,
       ],
