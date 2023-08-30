@@ -4,6 +4,7 @@ import 'package:client_common/api/user_api.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:oauth2_client/access_token_response.dart';
@@ -19,10 +20,15 @@ class OAuthPage extends StatefulWidget {
 class OAuthPageState extends State<OAuthPage> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: isAuthenticated(context),
+    return FutureBuilder(
+      future: Future.wait(
+        [
+          isAuthenticated(context),
+          rootBundle.loadString('texts/oauth-page-code.js'),
+        ],
+      ),
       builder: ((context, snapshot) {
-        if (!(snapshot.data ?? false)) {
+        if (snapshot.hasData && !(snapshot.data![0] as bool)) {
           var theme = LenraTheme.of(context);
           bool isMobileDevice = MediaQuery.of(context).size.width <= 875;
 
@@ -100,7 +106,7 @@ class OAuthPageState extends State<OAuthPage> {
                                 Column(
                                   children: [
                                     Text(
-                                      "module.exports = (data, counter) => {\n        return {\n                \"type\": \"flex\",\n                \"spacing\": 2, \n                \"mainAxisAlignment\": \n                \"spaceEvenly\", \n                \"crossAxisAlignment\": \n                \"center\", \n                \"children\": [ \n                        { \n                                \"type\": \"text\", \n                                \"value\": `\${counter.text}: \${data[0].count}` \n                        }, \n                        { \n                                \"type\": \"button\", \n                                \"text\": \"+\", \n                                \"onPressed\": { \n                                        \"action\": \"increment\", \n                                        \"props\": { \n                                                \"id\": data[0]._id, \n                                                \"datastore\": data[0].datastore \n                                        } \n                                } \n                        } \n                ] \n        }\n}",
+                                      snapshot.data![1] as String,
                                       style: TextStyle(color: Color(0xFF70CBF2), fontSize: 14),
                                     ),
                                   ],
