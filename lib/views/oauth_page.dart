@@ -96,7 +96,10 @@ class OAuthPageState extends State<OAuthPage> {
                                         children: [
                                           WidgetSpan(
                                             alignment: PlaceholderAlignment.middle,
-                                            child: Icon(Icons.arrow_forward, color: LenraColorThemeData.lenraBlue),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 8),
+                                              child: Icon(Icons.arrow_forward, color: LenraColorThemeData.lenraBlue),
+                                            ),
                                           )
                                         ],
                                         recognizer: TapGestureRecognizer()
