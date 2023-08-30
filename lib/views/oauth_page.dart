@@ -3,12 +3,14 @@ import 'package:client_common/api/response_models/user_response.dart';
 import 'package:client_common/api/user_api.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/oauth/oauth_model.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OAuthPage extends StatefulWidget {
   const OAuthPage({Key? key}) : super(key: key);
@@ -73,6 +75,42 @@ class OAuthPageState extends State<OAuthPage> {
                                 }
                               },
                               text: 'Sign in to Lenra',
+                            ),
+                            SizedBox(
+                              height: 32,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("You're not a dev?"),
+                                  SizedBox(height: 14),
+                                  RichText(
+                                    text: TextSpan(
+                                        text: "Go to the app platform",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: LenraColorThemeData.lenraBlue,
+                                        ),
+                                        children: [
+                                          WidgetSpan(
+                                            alignment: PlaceholderAlignment.middle,
+                                            child: Icon(Icons.arrow_forward, color: LenraColorThemeData.lenraBlue),
+                                          )
+                                        ],
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            const url = "https://app.lenra.io";
+                                            if (await canLaunchUrl(Uri.parse(url))) {
+                                              await launchUrl(Uri.parse(url));
+                                            } else {
+                                              throw "Could not launch $url";
+                                            }
+                                          }),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
