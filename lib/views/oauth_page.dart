@@ -1,6 +1,7 @@
 import 'package:client_common/api/lenra_http_client.dart';
 import 'package:client_common/api/response_models/user_response.dart';
 import 'package:client_common/api/user_api.dart';
+import 'package:client_common/config/config.dart';
 import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/gestures.dart';
@@ -104,7 +105,7 @@ class OAuthPageState extends State<OAuthPage> {
                                         ],
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () async {
-                                            const url = "https://app.lenra.io";
+                                            String url = Config.instance.appBaseUrl;
                                             if (await canLaunchUrl(Uri.parse(url))) {
                                               await launchUrl(Uri.parse(url));
                                             } else {
