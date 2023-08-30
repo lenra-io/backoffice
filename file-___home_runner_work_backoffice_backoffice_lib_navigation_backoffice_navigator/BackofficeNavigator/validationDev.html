@@ -63,11 +63,14 @@
   <pre class="language-dart"><code class="language-dart">static GoRoute validationDev = GoRoute(
   name: &quot;validation-dev&quot;,
   path: &quot;&#47;validation-dev&quot;,
-  redirect: (context, state) =&gt; Guard.guards(context, [
-    Guard.checkAuthenticated,
-    Guard.checkCguAccepted,
-    Guard.checkIsNotDev,
-  ]),
+  redirect: (context, state) =&gt; Guard.guards(
+    context,
+    [
+      BackofficeGuard.checkIsAuthenticated,
+      Guard.checkIsNotDev,
+    ],
+    metadata: {&quot;initialRoute&quot;: state.location},
+  ),
   pageBuilder: (context, state) =&gt; NoTransitionPage(
     child: DevValidationPage(),
   ),
@@ -119,6 +122,8 @@
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/accessSettings.html">accessSettings</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/gitSettings.html">gitSettings</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/oauth.html">oauth</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/oauthSettings.html">oauthSettings</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/overview.html">overview</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/router.html">router</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject.html">selectProject</a></li>

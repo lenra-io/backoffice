@@ -72,7 +72,6 @@
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final logger = Logger(&#39;BackofficeSideMenu&#39;);
   var theme = LenraTheme.of(context);
   return Drawer(
     width: 196,
@@ -123,12 +122,9 @@ Widget build(BuildContext context) {
               BackofficeSideMenuItem(
                 &quot;Logout&quot;,
                 icon: Icons.logout,
-                onPressed: () {
-                  context.read&lt;AuthModel&gt;().logout().then((value) {
-                    CommonNavigator.go(context, CommonNavigator.sign, extra: {&quot;register&quot;: false});
-                  }).catchError((error) {
-                    logger.warning(error);
-                  });
+                onPressed: () async {
+                  await context.read&lt;OAuthModel&gt;().helper.disconnect();
+                  context.go(&quot;&#47;&quot;);
                 },
               ),
               BackofficeSideMenuItem(

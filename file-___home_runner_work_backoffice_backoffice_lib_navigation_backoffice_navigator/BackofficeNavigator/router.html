@@ -52,7 +52,7 @@
         <section class="multi-line-signature">
           dynamic
           <span class="name ">router</span>
-          <div class="features">final</div>
+          <div class="features">read / write</div>
 
         </section>
         
@@ -60,14 +60,15 @@
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static final GoRouter router = GoRouter(
+  <pre class="language-dart"><code class="language-dart">static GoRouter router = GoRouter(
+  navigatorKey: Catcher.navigatorKey,
   routes: [
-    CommonNavigator.authRoutes,
     validationDev,
     welcome,
     createProject,
     overview,
     selectProject,
+    oauth,
   ],
 );
 
@@ -117,6 +118,8 @@
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/accessSettings.html">accessSettings</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/createProject.html">createProject</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/gitSettings.html">gitSettings</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/oauth.html">oauth</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/oauthSettings.html">oauthSettings</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/overview.html">overview</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/router.html">router</a></li>
           <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator/selectProject.html">selectProject</a></li>

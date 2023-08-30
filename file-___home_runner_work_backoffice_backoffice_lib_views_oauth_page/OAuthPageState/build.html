@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the build method from the OAuthPageState class, for the Dart programming language.">
+  <title>build method - OAuthPageState class - oauth_page library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">client_backoffice</a></li>
+    <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page-library.html">oauth_page</a></li>
+    <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html">OAuthPageState</a></li>
+    <li class="self-crumb">build method</li>
+  </ol>
+  <div class="self-name">build</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">build</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<div>
+  <ol class="annotation-list">
+    <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+  </ol>
+</div>
+
+<span class="returntype">dynamic</span>
+<span class="name ">build</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="build-param-context"><span class="type-annotation">dynamic</span> <span class="parameter-name">context</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Widget build(BuildContext context) {
+  return FutureBuilder(
+    future: Future.wait(
+      [
+        isAuthenticated(context),
+        rootBundle.loadString(&#39;texts&#47;oauth-page-code.js&#39;),
+      ],
+    ),
+    builder: ((context, snapshot) {
+      if (snapshot.hasData &amp;&amp; !(snapshot.data![0] as bool)) {
+        var theme = LenraTheme.of(context);
+        bool isMobileDevice = MediaQuery.of(context).size.width &lt;= 875;
+
+        return Scaffold(
+          body: Row(
+            children: [
+              Flexible(
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 40, top: 40),
+                        child: Image.asset(
+                          &#39;assets&#47;images&#47;logo-vertical.png&#39;,
+                          height: theme.baseSize * 8,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(100),
+                      child: Column(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: theme.lenraTextThemeData.headline1,
+                              text: &quot;Welcome to the &quot;,
+                              children: [
+                                TextSpan(
+                                    text: &quot;technical platform&quot;,
+                                    style: TextStyle(color: LenraColorThemeData.lenraBlue)),
+                                TextSpan(text: &quot; !&quot;),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 32),
+                          LenraButton(
+                            onPressed: () async {
+                              bool authenticated = await authenticate(context);
+                              if (authenticated) {
+                                context.go(context.read&lt;OAuthModel&gt;().beforeRedirectPath);
+                              }
+                            },
+                            text: &#39;Sign in to Lenra&#39;,
+                          ),
+                          SizedBox(
+                            height: 32,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(&quot;You&#39;re not a dev?&quot;),
+                                SizedBox(height: 14),
+                                RichText(
+                                  text: TextSpan(
+                                      text: &quot;Go to the app platform&quot;,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: LenraColorThemeData.lenraBlue,
+                                      ),
+                                      children: [
+                                        WidgetSpan(
+                                          alignment: PlaceholderAlignment.middle,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 8),
+                                            child: Icon(Icons.arrow_forward, color: LenraColorThemeData.lenraBlue),
+                                          ),
+                                        )
+                                      ],
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          String url = Config.instance.appBaseUrl;
+                                          if (await canLaunchUrl(Uri.parse(url))) {
+                                            await launchUrl(Uri.parse(url));
+                                          } else {
+                                            throw &quot;Could not launch $url&quot;;
+                                          }
+                                        }),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              rightSide(isMobileDevice, snapshot.data![1] as String)
+            ],
+          ),
+        );
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    }),
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">client_backoffice</a></li>
+  <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page-library.html">oauth_page</a></li>
+  <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html">OAuthPageState</a></li>
+  <li class="self-crumb">build method</li>
+</ol>
+
+
+    <h5>OAuthPageState class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html#constructors">Constructors</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState/OAuthPageState.html">OAuthPageState</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title"><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html#instance-methods">Methods</a></li>
+    <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState/build.html">build</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState/rightSide.html">rightSide</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+        <li class="section-title"><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState-class.html#static-methods">Static methods</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState/authenticate.html">authenticate</a></li>
+          <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_views_oauth_page/OAuthPageState/isAuthenticated.html">isAuthenticated</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    client_backoffice
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+
