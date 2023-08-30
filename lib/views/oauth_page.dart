@@ -35,7 +35,7 @@ class OAuthPageState extends State<OAuthPage> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: EdgeInsets.only(left: 60, top: 60),
+                          padding: EdgeInsets.only(left: 40, top: 40),
                           child: Image.asset(
                             'assets/images/logo-vertical.png',
                             height: theme.baseSize * 8,
