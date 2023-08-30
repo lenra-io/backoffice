@@ -80,42 +80,7 @@ class OAuthPageState extends State<OAuthPage> {
                     ],
                   ),
                 ),
-                isMobileDevice
-                    ? SizedBox()
-                    : Flexible(
-                        child: Container(
-                          constraints: BoxConstraints.expand(),
-                          padding: EdgeInsets.all(32),
-                          decoration: BoxDecoration(color: Color(0xFF1E232C)),
-                          child: SingleChildScrollView(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  children: List.generate(
-                                    37,
-                                    (index) => Text(
-                                      (index + 1).toString(),
-                                      style: TextStyle(color: Color(0xFF475367), fontSize: 14),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Column(
-                                  children: [
-                                    Text(
-                                      snapshot.data![1] as String,
-                                      style: TextStyle(color: Color(0xFF70CBF2), fontSize: 14),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                rightSide(isMobileDevice, snapshot.data![1] as String)
               ],
             ),
           );
@@ -154,5 +119,44 @@ class OAuthPageState extends State<OAuthPage> {
     }
 
     return false;
+  }
+
+  Widget rightSide(bool isMobileDevice, String code) {
+    return isMobileDevice
+        ? SizedBox()
+        : Flexible(
+            child: Container(
+              constraints: BoxConstraints.expand(),
+              padding: EdgeInsets.all(32),
+              decoration: BoxDecoration(color: Color(0xFF1E232C)),
+              child: SingleChildScrollView(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: List.generate(
+                        37,
+                        (index) => Text(
+                          (index + 1).toString(),
+                          style: TextStyle(color: Color(0xFF475367), fontSize: 14),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          code,
+                          style: TextStyle(color: Color(0xFF70CBF2), fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }
