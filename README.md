@@ -44,9 +44,14 @@ This repository gives you the possibility to create, manage and deploy your appl
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+On the server project, you need to have a running instance of the [Lenra Server](https://github.com/lenra-io/server) and have created an OAuth client for the backoffice with the next command:
+```sh
+mix create_oauth2_client backoffice
+```
+
 Run flutter app with chrome
 ```sh
-flutter run -d chrome --web-port 10000 --dart-define=LENRA_SERVER_URL=http://localhost:4000
+flutter run -d chrome --web-port 10000 --dart-define=LENRA_SERVER_URL=http://localhost:4000 --dart-define=OAUTH_CLIENT_ID=<client_id_from_the_previous_cmd>
 ```
 
 Run flutter test

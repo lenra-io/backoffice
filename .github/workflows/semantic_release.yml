@@ -8,7 +8,7 @@ on:
       - "*.x"
 
 env:
-  flutter_version: "3.3.9"
+  flutter_version: "3.10.x"
 
 jobs:
   release:
@@ -35,7 +35,7 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
       - name: Build Flutter Web
         run: |
-          flutter build web
+          flutter build web --no-tree-shake-icons
           cd ..
       - name: Setup Node.js
         uses: actions/setup-node@v2
