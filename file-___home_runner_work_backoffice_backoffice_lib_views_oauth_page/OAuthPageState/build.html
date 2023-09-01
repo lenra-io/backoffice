@@ -76,7 +76,7 @@ Widget build(BuildContext context) {
     future: Future.wait(
       [
         isAuthenticated(context),
-        rootBundle.loadString(&#39;texts&#47;oauth-page-code.js&#39;),
+        rootBundle.loadString(&#39;assets&#47;texts&#47;oauth-page-code.js&#39;),
       ],
     ),
     builder: ((context, snapshot) {
