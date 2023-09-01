@@ -27,7 +27,7 @@ class OAuthPageState extends State<OAuthPage> {
       future: Future.wait(
         [
           isAuthenticated(context),
-          rootBundle.loadString('texts/oauth-page-code.js'),
+          rootBundle.loadString('assets/texts/oauth-page-code.js'),
         ],
       ),
       builder: ((context, snapshot) {
