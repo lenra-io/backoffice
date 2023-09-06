@@ -76,7 +76,7 @@ class BackofficeDrawer extends StatelessWidget {
                   "Contact us",
                   icon: Icons.messenger_outline_rounded,
                   onPressed: () async {
-                    const url = "mailto:contact@lenra.io";
+                    const url = "https://www.lenra.io/contact.html";
                     if (await canLaunchUrl(Uri.parse(url))) {
                       await launchUrl(Uri.parse(url));
                     } else {
