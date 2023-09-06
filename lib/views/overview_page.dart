@@ -41,6 +41,7 @@ class _OverviewPageState extends State<OverviewPage> {
           setState(() {
             app = userApplicationModel.getApp(widget.appId);
           });
+
           if (app == null) {
             CommonNavigator.go(context, BackofficeNavigator.selectProject);
           } else {
@@ -50,6 +51,7 @@ class _OverviewPageState extends State<OverviewPage> {
         },
       );
     });
+
     super.initState();
   }
 
@@ -67,10 +69,8 @@ class _OverviewPageState extends State<OverviewPage> {
     // A bit dirty
     if (app == null) return Center(child: CircularProgressIndicator());
 
-    List<BuildResponse> builds =
-        context.select<BuildModel, List<BuildResponse>>((buildModel) => buildModel.buildsForApp(app!.id!));
-    List<DeploymentResponse> deployments = context.select<DeploymentModel, List<DeploymentResponse>>(
-        (deploymentModel) => deploymentModel.deploymentsForApp(app!.id!));
+    List<BuildResponse> builds = context.read<BuildModel>().buildsForApp(widget.appId);
+    List<DeploymentResponse> deployments = context.read<DeploymentModel>().deploymentsForApp(widget.appId);
 
     var hasPendingDeployment = false;
     var hasPublishedDeployment = false;
@@ -80,7 +80,7 @@ class _OverviewPageState extends State<OverviewPage> {
       builds.sort((a, b) => a.buildNumber.compareTo(b.buildNumber));
 
       // Check if there is a createBuildStatus that is currently fetching.
-      var createBuildStatusFetching = buildModel.createBuildStatus[app!.id]?.isFetching() ?? false;
+      var createBuildStatusFetching = buildModel.createBuildStatus[widget.appId]?.isFetching() ?? false;
 
       hasPendingDeployment = deployments.any((deployment) =>
               deployment.status == DeploymentStatus.waitingForBuild ||
@@ -90,8 +90,18 @@ class _OverviewPageState extends State<OverviewPage> {
 
       hasPendingBuild = builds.any((build) => build.status == BuildStatus.pending);
 
-      if (hasPendingDeployment || hasPendingBuild) {
-        timer = Timer(Duration(seconds: 5), () {
+      if (!hasPendingDeployment && !hasPendingBuild && (timer?.isActive ?? false)) {
+        timer?.cancel();
+      }
+
+      if ((hasPendingDeployment || hasPendingBuild) && !(timer?.isActive ?? false)) {
+        deploymentModel.fetchDeployments(widget.appId).then((_) {
+          buildModel.fetchBuilds(widget.appId).then((_) {
+            setState(() {});
+          });
+        });
+
+        timer = Timer.periodic(Duration(seconds: 5), (timer) {
           deploymentModel.fetchDeployments(widget.appId).then((_) {
             buildModel.fetchBuilds(widget.appId).then((_) {
               setState(() {});
@@ -109,7 +119,7 @@ class _OverviewPageState extends State<OverviewPage> {
       actionWidget: LenraButton(
         text: "Publish my application",
         disabled: hasPendingDeployment || hasPendingBuild,
-        onPressed: () => buildModel.createBuild(app!.id!).then((_) {
+        onPressed: () => buildModel.createBuild(widget.appId).then((_) {
           setState(() {});
         }),
       ),
