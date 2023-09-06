@@ -63,6 +63,7 @@ class SettingsPage extends StatelessWidget {
 
   Widget createSubMenuItem(BuildContext context, String text, GoRoute route) {
     var isCurrentRoute = CommonNavigator.isCurrent(context, route);
+    print("IS CURRENT: ${isCurrentRoute}");
     return LenraContainer(
       decoration: BoxDecoration(color: isCurrentRoute ? LenraColorThemeData.lenraBlue : Colors.transparent),
       child: InkWell(
