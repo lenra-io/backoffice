@@ -131,9 +131,10 @@ Widget build(BuildContext context) {
                 &quot;Contact us&quot;,
                 icon: Icons.messenger_outline_rounded,
                 onPressed: () async {
-                  const url = &quot;mailto:contact@lenra.io&quot;;
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
+                  const url = &quot;https:&#47;&#47;www.lenra.io&#47;contact.html&quot;;
+                  var uri = Uri.parse(url);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
                   } else {
                     throw &quot;Could not launch $url&quot;;
                   }
