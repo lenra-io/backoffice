@@ -40,6 +40,8 @@ dependencies:
       ref: ae44d0bbce00c3801629b65f60783d15184a7f8f
   intl: ^0.18.1
   oauth2_client: ^3.2.0
+  flutter_stripe: ^9.4.0
+  flutter_stripe_web: ^4.4.0
 
 flutter:
   uses-material-design: true

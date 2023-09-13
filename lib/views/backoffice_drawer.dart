@@ -5,6 +5,7 @@ import 'package:client_common/models/user_application_model.dart';
 import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/oauth/oauth_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,13 @@ class BackofficeDrawer extends StatelessWidget {
                   "Account",
                   icon: Icons.account_circle_outlined,
                   disabled: true,
+                ),
+                BackofficeSideMenuItem(
+                  "Subscription",
+                  icon: Icons.money,
+                  onPressed: () async {
+                    context.go("/stripe");
+                  },
                 ),
                 BackofficeSideMenuItem(
                   "Documentation",

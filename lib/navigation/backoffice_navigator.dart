@@ -9,6 +9,7 @@ import 'package:client_backoffice/views/settings/external_clients_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
 import 'package:client_backoffice/views/settings/manage_access_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
+import 'package:client_backoffice/views/stripe_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
 import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/navigator/guard.dart';
@@ -150,6 +151,15 @@ class BackofficeNavigator extends CommonNavigator {
     routes: [settings],
   );
 
+  static GoRoute stripe = GoRoute(
+      name: "stripe",
+      path: "/stripe",
+      pageBuilder: (context, state) {
+        return NoTransitionPage(
+          child: StripePage(),
+        );
+      });
+
   static GoRoute selectProject = GoRoute(
     name: "select-project",
     path: "/",
@@ -179,6 +189,7 @@ class BackofficeNavigator extends CommonNavigator {
       overview,
       selectProject,
       oauth,
+      stripe,
     ],
   );
 }
