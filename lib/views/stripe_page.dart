@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:client_backoffice/views/stripe/loading_button.dart';
-import 'package:client_backoffice/views/stripe/payment_element.dart';
+import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:lenra_components/component/lenra_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StripePage extends StatefulWidget {
   @override
@@ -11,67 +12,70 @@ class StripePage extends StatefulWidget {
 }
 
 class _StripePageState extends State<StripePage> {
-  String? clientSecret;
-
   @override
   void initState() {
-    getClientSecret();
     super.initState();
-  }
-
-  Future<void> getClientSecret() async {
-    try {
-      final client = await createPaymentIntent();
-      print("GET CLIENT SECRET");
-      print(client);
-      setState(() {
-        clientSecret = client;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(clientSecret);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter App'),
-      ),
-      body: Column(
-        children: [
-          Container(
-              child: clientSecret != null
-                  ? LenraPaymentElement(clientSecret)
-                  : Center(child: CircularProgressIndicator())),
-          LoadingButton(onPressed: pay, text: 'Pay'),
-        ],
+    return BackofficePage(
+      title: 'Subscribe to Lenra',
+      child: FutureBuilder(
+        future: createCustomer(),
+        builder: (context, state) {
+          return Column(
+            children: [
+              LenraButton(
+                onPressed: () {},
+                text: 'Pay monthly',
+              ),
+              LenraButton(
+                onPressed: () {},
+                text: 'Pay yearly',
+              )
+            ],
+          );
+        },
       ),
     );
   }
 
-  Future<String> createPaymentIntent() async {
-    final url = Uri.parse('http://localhost:4242/create-payment-intent');
+  Future<void> createCheckoutSession(String customerId, LenraSubscriptionOptions options) async {
+    final url = Uri.parse('http://localhost:4242/stripe/checkout');
+    final session = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'customer': customerId,
+      }),
+    );
+
+    launchUrl(Uri.parse(jsonDecode(session.body)['url']));
+  }
+
+  Future<String> createCustomer() async {
+    final url = Uri.parse('http://localhost:4242/stripe/customers');
     final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'currency': 'eur',
-        'amount': 800,
-        'payment_method_types': ['card'],
-        'request_three_d_secure': 'any',
+        'email': 'jonas@lenra.io',
       }),
     );
-    print(json.decode(response.body));
-    return json.decode(response.body)['client_secret'];
+    return json.decode(response.body)['id'];
   }
+}
+
+enum SubscriptionPlan { yearly, monthly }
+
+class LenraSubscriptionOptions {
+  SubscriptionPlan plan;
+  bool recurring;
+
+  LenraSubscriptionOptions({required this.plan, required this.recurring});
 }
