@@ -23,15 +23,31 @@ class _StripePageState extends State<StripePage> {
       title: 'Subscribe to Lenra',
       child: FutureBuilder(
         future: createCustomer(),
-        builder: (context, state) {
+        builder: (context, snapshot) {
           return Column(
             children: [
               LenraButton(
-                onPressed: () {},
+                onPressed: () {
+                  createCheckoutSession(
+                    snapshot.data ?? '',
+                    SubscriptionOptions(
+                      plan: SubscriptionPlan.month,
+                      recurring: true,
+                    ),
+                  );
+                },
                 text: 'Pay monthly',
               ),
               LenraButton(
-                onPressed: () {},
+                onPressed: () {
+                  createCheckoutSession(
+                    snapshot.data ?? '',
+                    SubscriptionOptions(
+                      plan: SubscriptionPlan.year,
+                      recurring: true,
+                    ),
+                  );
+                },
                 text: 'Pay yearly',
               )
             ],
@@ -41,7 +57,7 @@ class _StripePageState extends State<StripePage> {
     );
   }
 
-  Future<void> createCheckoutSession(String customerId, LenraSubscriptionOptions options) async {
+  Future<void> createCheckoutSession(String customerId, SubscriptionOptions options) async {
     final url = Uri.parse('http://localhost:4242/stripe/checkout');
     final session = await http.post(
       url,
@@ -50,6 +66,10 @@ class _StripePageState extends State<StripePage> {
       },
       body: json.encode({
         'customer': customerId,
+        'mode': options.recurring ? 'subscription' : 'payment',
+        'plan': options.plan.name,
+        'success_url':
+            'http://localhost:10000/stripe/success?session_id={CHECKOUT_SESSION_ID}' // TODO: Find a way to get the real host
       }),
     );
 
@@ -71,11 +91,11 @@ class _StripePageState extends State<StripePage> {
   }
 }
 
-enum SubscriptionPlan { yearly, monthly }
+enum SubscriptionPlan { month, year }
 
-class LenraSubscriptionOptions {
+class SubscriptionOptions {
   SubscriptionPlan plan;
   bool recurring;
 
-  LenraSubscriptionOptions({required this.plan, required this.recurring});
+  SubscriptionOptions({required this.plan, required this.recurring});
 }
