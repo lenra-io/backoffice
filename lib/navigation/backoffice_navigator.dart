@@ -157,7 +157,7 @@ class BackofficeNavigator extends CommonNavigator {
     pageBuilder: (context, state) {
       return NoTransitionPage(
         child: SubscriptionPage(
-          appId: state.params["appId"]!,
+          appId: int.parse(state.params["appId"]!),
         ),
       );
     },

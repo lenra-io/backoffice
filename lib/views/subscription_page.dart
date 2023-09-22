@@ -1,6 +1,7 @@
 import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:client_common/api/request_models/create_stripe_checkout_request.dart';
 import 'package:client_common/api/request_models/create_stripe_customer_request.dart';
+import 'package:client_common/api/response_models/get_stripe_subscriptions_response.dart';
 import 'package:client_common/api/response_models/user_response.dart';
 import 'package:client_common/api/stripe_api.dart';
 import 'package:client_common/api/user_api.dart';
@@ -10,7 +11,7 @@ import 'package:lenra_components/lenra_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SubscriptionPage extends StatefulWidget {
-  final String appId;
+  final int appId;
 
   SubscriptionPage({required this.appId});
 
@@ -42,7 +43,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             return CircularProgressIndicator();
           }
 
-          if ((snapshot.data?[1] as List<Map<String, dynamic>>).isEmpty) {
+          if ((snapshot.data?[1] as GetStripeSubscriptionsResponse).subscriptions.isEmpty) {
             String customer = snapshot.data?[0] as String? ?? '';
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
