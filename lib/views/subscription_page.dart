@@ -157,7 +157,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     mode: options.recurring ? 'subscription' : 'payment',
                     customer: customer,
                     successUrl: 'http://localhost:10000/stripe',
-                    cancelUrl: '',
+                    cancelUrl: 'http://localhost:10000/stripe',
                   ),
                 );
 
