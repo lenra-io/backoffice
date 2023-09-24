@@ -146,8 +146,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             child: LenraButton(
               onPressed: () async {
                 SubscriptionOptions options = SubscriptionOptions(
-                  plan: SubscriptionPlan.month,
-                  recurring: yearlyRecurring,
+                  plan: plan,
+                  recurring: plan == SubscriptionPlan.month ? monthlyRecurring : yearlyRecurring,
                 );
 
                 String redirectUrl = await StripeApi.createCheckout(
