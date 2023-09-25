@@ -38,7 +38,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           }
 
           String customer = snapshot.data?[0] as String? ?? '';
-          String? currentPlan = (snapshot.data?[1] as GetStripeSubscriptionsResponse).subscription?["plan"];
+          String? currentPlan = (snapshot.data?[1] as GetStripeSubscriptionsResponse?)?.plan;
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
