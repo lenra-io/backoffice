@@ -20,9 +20,6 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
-  bool monthlyRecurring = false;
-  bool yearlyRecurring = false;
-
   @override
   void initState() {
     super.initState();
@@ -43,28 +40,33 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             return CircularProgressIndicator();
           }
 
-          if ((snapshot.data?[1] as GetStripeSubscriptionsResponse).subscriptions.isEmpty) {
-            String customer = snapshot.data?[0] as String? ?? '';
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                subcriptionBox(SubscriptionPlan.month, customer),
-                SizedBox(
-                  width: 32,
-                ),
-                subcriptionBox(SubscriptionPlan.year, customer),
-              ],
-            );
-          } else {
-            return alreadySubscribedWidget((snapshot.data![1] as List<Map<String, dynamic>>)[0]);
-          }
+          String customer = snapshot.data?[0] as String? ?? '';
+          String? currentPlan = (snapshot.data?[1] as GetStripeSubscriptionsResponse).subscription?["plan"];
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              subcriptionBox(
+                SubscriptionPlan.month,
+                customer,
+                currentPlan,
+              ),
+              SizedBox(
+                width: 32,
+              ),
+              subcriptionBox(
+                SubscriptionPlan.year,
+                customer,
+                currentPlan,
+              ),
+            ],
+          );
         },
       ),
     );
   }
 
-  Widget subcriptionBox(SubscriptionPlan plan, String customer) {
+  Widget subcriptionBox(SubscriptionPlan plan, String customer, String? currentPlan) {
     var theme = LenraTheme.of(context);
     String title;
     String price;
@@ -81,6 +83,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       price = "40 €";
       realPrice = "80 €";
       per = "year";
+    }
+
+    bool isCurrentPlan = (currentPlan != null && currentPlan == plan.name);
+    bool isNotCurrentPlan = (currentPlan != null && currentPlan != plan.name);
+
+    String buttonText = "Subscribe";
+    if (isCurrentPlan) {
+      buttonText = "Manage";
     }
 
     return Container(
@@ -121,49 +131,37 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   style: theme.lenraTextThemeData.disabledBodyText.copyWith(decoration: TextDecoration.lineThrough)),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LenraCheckbox(
-                  value: plan == SubscriptionPlan.month ? monthlyRecurring : yearlyRecurring,
-                  onPressed: (value) {
-                    setState(() {
-                      if (plan == SubscriptionPlan.month) {
-                        monthlyRecurring = value!;
-                      } else {
-                        yearlyRecurring = value!;
-                      }
-                    });
-                  }),
-              Text("Recurring"),
-            ],
-          ),
           Container(
             constraints: BoxConstraints(
               maxHeight: 100,
               minWidth: double.infinity,
             ),
             child: LenraButton(
+              disabled: isNotCurrentPlan,
               onPressed: () async {
-                SubscriptionOptions options = SubscriptionOptions(
-                  plan: plan,
-                  recurring: plan == SubscriptionPlan.month ? monthlyRecurring : yearlyRecurring,
-                );
+                String? redirectUrl;
+                if (isCurrentPlan) {
+                  // TODO: Jonas: Find a way to get the manage URL
+                  redirectUrl = "";
+                } else {
+                  SubscriptionOptions options = SubscriptionOptions(
+                    plan: plan,
+                  );
 
-                String redirectUrl = await StripeApi.createCheckout(
-                  CreateStripeCheckoutRequest(
-                    appId: widget.appId,
-                    plan: options.plan.name,
-                    mode: options.recurring ? 'subscription' : 'payment',
-                    customer: customer,
-                    successUrl: 'http://localhost:10000/stripe',
-                    cancelUrl: 'http://localhost:10000/stripe',
-                  ),
-                );
+                  redirectUrl = await StripeApi.createCheckout(
+                    CreateStripeCheckoutRequest(
+                      appId: widget.appId,
+                      plan: options.plan.name,
+                      customer: customer,
+                      successUrl: 'http://localhost:10000/stripe',
+                      cancelUrl: 'http://localhost:10000/stripe',
+                    ),
+                  );
+                }
 
                 launchUrl(Uri.parse(redirectUrl));
               },
-              text: "Subscribe",
+              text: buttonText,
             ),
           ),
         ],
@@ -173,7 +171,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   Widget alreadySubscribedWidget(Map<String, dynamic> subscription) {
     var theme = LenraTheme.of(context);
-    DateTime subscriptionEnd = DateTime.fromMillisecondsSinceEpoch(subscription['current_period_end']);
+    DateTime subscriptionEnd = DateTime.parse(subscription['end_date']);
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
     return Row(
@@ -213,7 +211,6 @@ enum SubscriptionPlan { month, year }
 
 class SubscriptionOptions {
   SubscriptionPlan plan;
-  bool recurring;
 
-  SubscriptionOptions({required this.plan, required this.recurring});
+  SubscriptionOptions({required this.plan});
 }
