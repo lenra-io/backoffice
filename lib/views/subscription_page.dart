@@ -141,8 +141,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               onPressed: () async {
                 String? redirectUrl;
                 if (isCurrentPlan) {
-                  // TODO: Jonas: Find a way to get the manage URL
-                  redirectUrl = "";
+                  redirectUrl = await StripeApi.getCustomerPortalUrl();
                 } else {
                   SubscriptionOptions options = SubscriptionOptions(
                     plan: plan,
