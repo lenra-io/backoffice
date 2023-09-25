@@ -2,11 +2,8 @@ import 'package:client_backoffice/views/backoffice_page.dart';
 import 'package:client_common/api/request_models/create_stripe_checkout_request.dart';
 import 'package:client_common/api/request_models/create_stripe_customer_request.dart';
 import 'package:client_common/api/response_models/get_stripe_subscriptions_response.dart';
-import 'package:client_common/api/response_models/user_response.dart';
 import 'package:client_common/api/stripe_api.dart';
-import 'package:client_common/api/user_api.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -143,14 +140,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 if (isCurrentPlan) {
                   redirectUrl = await StripeApi.getCustomerPortalUrl();
                 } else {
-                  SubscriptionOptions options = SubscriptionOptions(
-                    plan: plan,
-                  );
-
                   redirectUrl = await StripeApi.createCheckout(
                     CreateStripeCheckoutRequest(
                       appId: widget.appId,
-                      plan: options.plan.name,
+                      plan: plan.name,
                       customer: customer,
                       successUrl: 'http://localhost:10000/stripe',
                       cancelUrl: 'http://localhost:10000/stripe',
@@ -167,49 +160,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       ),
     );
   }
-
-  Widget alreadySubscribedWidget(Map<String, dynamic> subscription) {
-    var theme = LenraTheme.of(context);
-    DateTime subscriptionEnd = DateTime.parse(subscription['end_date']);
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 300,
-          height: 300,
-          decoration: BoxDecoration(
-            border: Border.all(width: 2, color: Color(0x33000000)),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Text("Your subscription", style: theme.lenraTextThemeData.headline1),
-              Text("Ends : ${dateFormat.format(subscriptionEnd)}"),
-              LenraButton(
-                onPressed: () async {
-                  UserResponse response = await UserApi.me();
-                  String email = response.user.email;
-                  Uri managementUri =
-                      Uri.parse("https://billing.stripe.com/p/login/3cs4h61Sz45e06c000?prefilled_email=$email");
-
-                  launchUrl(managementUri);
-                },
-                text: "Manage",
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 enum SubscriptionPlan { month, year }
-
-class SubscriptionOptions {
-  SubscriptionPlan plan;
-
-  SubscriptionOptions({required this.plan});
-}

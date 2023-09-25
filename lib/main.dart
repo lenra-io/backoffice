@@ -14,7 +14,6 @@ import 'package:client_common/oauth/oauth_model.dart';
 import 'package:client_common/views/lenra_report_mode.dart';
 import 'package:client_common/views/simple_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:lenra_components/lenra_components.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +28,6 @@ void main() async {
   });
 
   debugPrint("Starting main app[debugPrint]: ${Config.instance.application}");
-  Stripe.publishableKey =
-      'pk_test_51NonRLDcEBIbl7VfgNeyG0MgnIy9VIMUPxeqXqo2guDTEHyRSbQahqqOE9FivntSSDDyWEzwZT5kY3YA6O8tVAom00N39tfZyO';
 
   const environment = String.fromEnvironment('ENVIRONMENT');
   var reportMode = LenraReportMode();
