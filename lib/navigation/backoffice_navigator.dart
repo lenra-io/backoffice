@@ -9,6 +9,7 @@ import 'package:client_backoffice/views/settings/external_clients_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
 import 'package:client_backoffice/views/settings/manage_access_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
+import 'package:client_backoffice/views/subscription_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
 import 'package:client_common/navigator/common_navigator.dart';
 import 'package:client_common/navigator/guard.dart';
@@ -147,7 +148,19 @@ class BackofficeNavigator extends CommonNavigator {
         ),
       );
     },
-    routes: [settings],
+    routes: [settings, subscription],
+  );
+
+  static GoRoute subscription = GoRoute(
+    name: "subscription",
+    path: "subscription",
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        child: SubscriptionPage(
+          appId: int.parse(state.params["appId"]!),
+        ),
+      );
+    },
   );
 
   static GoRoute selectProject = GoRoute(

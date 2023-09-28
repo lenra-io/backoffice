@@ -204,6 +204,16 @@ class _ProjectMenuState extends State<_ProjectMenu> {
         onPressed: navigateTo(context, null),
       ),
       BackofficeSideMenuRoute(
+        "Subscription",
+        icon: Icons.money,
+        selected: CommonNavigator.isCurrent(context, BackofficeNavigator.subscription),
+        onPressed: navigateTo(
+          context,
+          BackofficeNavigator.subscription,
+          params: {"appId": selectedApp.id.toString()},
+        ),
+      ),
+      BackofficeSideMenuRoute(
         "Settings",
         icon: Icons.settings_outlined,
         selected: CommonNavigator.isCurrent(context, BackofficeNavigator.settings),
