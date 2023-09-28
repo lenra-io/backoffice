@@ -146,7 +146,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       plan: plan.name,
                       customer: customer,
                       successUrl: 'http://${Uri.base.host}/app/${widget.appId}/subscription',
-                      cancelUrl: 'http://${Uri.base.host}/app/${widget.appId}/stripe',
+                      cancelUrl: 'http://${Uri.base.host}/app/${widget.appId}/subscription',
                     ),
                   );
                 }
