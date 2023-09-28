@@ -29,7 +29,7 @@ void main() async {
 
   debugPrint("Starting main app[debugPrint]: ${Config.instance.application}");
 
-  Config.instance.environment.length == 0 ? String.fromEnvironment('ENVIRONMENT') : Config.instance.environment;
+  const environment = Config.instance.environment;
 
   var reportMode = LenraReportMode();
   CatcherOptions debugOptions = CatcherOptions(
