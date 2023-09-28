@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the router property from the BackofficeNavigator class, for the Dart programming language.">
-  <title>router property - BackofficeNavigator class - backoffice_navigator library - Dart API</title>
+  <meta name="description" content="API docs for the subscription property from the BackofficeNavigator class, for the Dart programming language.">
+  <title>subscription property - BackofficeNavigator class - backoffice_navigator library - Dart API</title>
 
 
   
@@ -32,9 +32,9 @@
     <li><a href="../../index.html">client_backoffice</a></li>
     <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator-library.html">backoffice_navigator</a></li>
     <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator-class.html">BackofficeNavigator</a></li>
-    <li class="self-crumb">router property</li>
+    <li class="self-crumb">subscription property</li>
   </ol>
-  <div class="self-name">router</div>
+  <div class="self-name">subscription</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -45,13 +45,13 @@
 
   <div id="dartdoc-main-content" class="main-content">
       <div>
-<h1><span class="kind-property">router</span> property 
+<h1><span class="kind-property">subscription</span> property 
     <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
 </h1></div>
 
         <section class="multi-line-signature">
           dynamic
-          <span class="name ">router</span>
+          <span class="name ">subscription</span>
           <div class="features">read / write</div>
 
         </section>
@@ -60,16 +60,16 @@
         
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">static GoRouter router = GoRouter(
-  navigatorKey: Catcher.navigatorKey,
-  routes: [
-    validationDev,
-    welcome,
-    createProject,
-    overview,
-    selectProject,
-    oauth,
-  ],
+  <pre class="language-dart"><code class="language-dart">static GoRoute subscription = GoRoute(
+  name: &quot;subscription&quot;,
+  path: &quot;subscription&quot;,
+  pageBuilder: (context, state) {
+    return NoTransitionPage(
+      child: SubscriptionPage(
+        appId: int.parse(state.params[&quot;appId&quot;]!),
+      ),
+    );
+  },
 );
 
 </code></pre>
@@ -89,7 +89,7 @@
   <li><a href="../../index.html">client_backoffice</a></li>
   <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator-library.html">backoffice_navigator</a></li>
   <li><a href="../../file-___home_runner_work_backoffice_backoffice_lib_navigation_backoffice_navigator/BackofficeNavigator-class.html">BackofficeNavigator</a></li>
-  <li class="self-crumb">router property</li>
+  <li class="self-crumb">subscription property</li>
 </ol>
 
 
