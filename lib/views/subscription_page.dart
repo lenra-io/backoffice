@@ -17,6 +17,9 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
+  bool isSubscribing = false;
+  SubscriptionPlan? subscribingForPlan;
+
   @override
   Widget build(BuildContext context) {
     return BackofficePage(
@@ -129,8 +132,25 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               minWidth: double.infinity,
             ),
             child: LenraButton(
-              disabled: isNotCurrentPlan,
+              disabled: isNotCurrentPlan || isSubscribing,
+              rightIcon: isSubscribing && subscribingForPlan == plan
+                  ? Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SizedBox(
+                        height: 10,
+                        width: 10,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    )
+                  : null,
               onPressed: () async {
+                setState(() {
+                  isSubscribing = true;
+                  subscribingForPlan = plan;
+                });
+
                 String? redirectUrl;
                 if (isCurrentPlan) {
                   redirectUrl = await StripeApi.getCustomerPortalUrl();
@@ -154,7 +174,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   await Future.delayed(Duration(milliseconds: 100));
                 }
 
-                setState(() {});
+                setState(() {
+                  isSubscribing = false;
+                });
               },
               text: buttonText,
             ),
