@@ -18,11 +18,6 @@ class SubscriptionPage extends StatefulWidget {
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BackofficePage(
       title: 'Subscription',
@@ -145,13 +140,21 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       appId: widget.appId,
                       plan: plan.name,
                       customer: customer,
-                      successUrl: 'http://${Uri.base.host}/app/${widget.appId}/subscription',
-                      cancelUrl: 'http://${Uri.base.host}/app/${widget.appId}/subscription',
+                      successUrl: 'http://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
+                      cancelUrl: 'http://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
                     ),
                   );
                 }
 
                 launchUrl(Uri.parse(redirectUrl));
+
+                /// Wait until the browser closes
+                await Future.delayed(Duration(milliseconds: 100));
+                while (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+                  await Future.delayed(Duration(milliseconds: 100));
+                }
+
+                setState(() {});
               },
               text: buttonText,
             ),
