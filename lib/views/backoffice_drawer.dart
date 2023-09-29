@@ -76,9 +76,10 @@ class BackofficeDrawer extends StatelessWidget {
                   "Contact us",
                   icon: Icons.messenger_outline_rounded,
                   onPressed: () async {
-                    const url = "mailto:contact@lenra.io";
-                    if (await canLaunchUrl(Uri.parse(url))) {
-                      await launchUrl(Uri.parse(url));
+                    const url = "https://www.lenra.io/contact.html";
+                    var uri = Uri.parse(url);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
                     } else {
                       throw "Could not launch $url";
                     }
@@ -201,6 +202,16 @@ class _ProjectMenuState extends State<_ProjectMenu> {
         disabled: true,
         selected: false,
         onPressed: navigateTo(context, null),
+      ),
+      BackofficeSideMenuRoute(
+        "Subscription",
+        icon: Icons.money,
+        selected: CommonNavigator.isCurrent(context, BackofficeNavigator.subscription),
+        onPressed: navigateTo(
+          context,
+          BackofficeNavigator.subscription,
+          params: {"appId": selectedApp.id.toString()},
+        ),
       ),
       BackofficeSideMenuRoute(
         "Settings",
