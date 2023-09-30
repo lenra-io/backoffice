@@ -140,8 +140,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       appId: widget.appId,
                       plan: plan.name,
                       customer: customer,
-                      successUrl: 'http://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
-                      cancelUrl: 'http://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
+                      successUrl: '${Uri.base.scheme}://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
+                      cancelUrl: '${Uri.base.scheme}://${Uri.base.host}:${Uri.base.port}/subscription_redirect.html',
                     ),
                   );
                 }
