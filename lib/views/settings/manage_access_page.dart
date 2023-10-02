@@ -71,28 +71,30 @@ class _ManageAccessPageState extends State<ManageAccessPage> {
                   ),
                   LenraToggle(
                     value: isPublic,
-                    onPressed: (value) {
-                      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(widget.appId);
-                      mainEnvRequest.then(
-                        (mainEnv) {
-                          context
-                              .read<UserApplicationModel>()
-                              .updateEnvironment(
-                                  widget.appId, mainEnv.mainEnv.id, UpdateEnvironmentRequest(isPublic: value))
-                              .then((envResponse) {
-                            setState(() {
-                              isPublic = envResponse.environmentResponse.isPublic;
-                            });
-                          });
-                        },
-                      ).catchError((error) {
+                    onPressed: (value) async {
+                      var mainEnv = await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+
+                      try {
+                        var updatedEnv = await context.read<UserApplicationModel>().updateEnvironment(
+                              widget.appId,
+                              mainEnv.mainEnv.id,
+                              UpdateEnvironmentRequest(isPublic: value),
+                            );
+
+                        setState(() {
+                          isPublic = updatedEnv.environmentResponse.isPublic;
+                        });
+                      } on ApiError catch (error) {
+                        if (error.reason == "subscription_required") {
+                          error.message = "You must be subscribed to make your application public.";
+                        }
                         ScaffoldMessenger.of(context).showSnackBar(ApiErrorSnackBar(
                           error: error,
                           actionLabel: 'Close',
                           onPressAction: () {},
                         ));
                         logger.warning(error);
-                      });
+                      }
                     },
                   ),
                   LenraText(
@@ -147,26 +149,26 @@ class _ManageAccessPageState extends State<ManageAccessPage> {
         : Align(alignment: Alignment.topCenter, child: CircularProgressIndicator());
   }
 
-  void submit() {
+  void submit() async {
     if (_formKey.currentState!.validate()) {
-      var mainEnvRequest = context.read<UserApplicationModel>().getMainEnv(widget.appId);
-      mainEnvRequest.then(
-        (mainEnv) {
-          context
-              .read<UserApplicationModel>()
-              .inviteUser(
-                  widget.appId, mainEnv.mainEnv.id, CreateEnvironmentUserAccessRequest(email: textfieldUserEmail))
-              .then((envResponse) {
-            setState(() {
-              invitedUsers.add(textfieldUserEmail);
-            });
-          }).catchError((error) {
-            logError(error);
-          });
-        },
-      ).catchError((error) {
-        logError(error);
-      });
+      var mainEnv = await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+
+      try {
+        await context.read<UserApplicationModel>().inviteUser(
+              widget.appId,
+              mainEnv.mainEnv.id,
+              CreateEnvironmentUserAccessRequest(email: textfieldUserEmail),
+            );
+
+        setState(() {
+          invitedUsers.add(textfieldUserEmail);
+        });
+      } on ApiError catch (error) {
+        if (error.reason == "subscription_required") {
+          error.message = "You must be subscribed to invite more than 3 users.";
+          logError(error);
+        }
+      }
     }
   }
 
