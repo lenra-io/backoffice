@@ -1,4 +1,5 @@
 import 'package:client_common/api/lenra_http_client.dart';
+import 'package:client_common/api/response_models/api_error.dart';
 import 'package:client_common/api/response_models/user_response.dart';
 import 'package:client_common/api/user_api.dart';
 import 'package:client_common/config/config.dart';
@@ -31,6 +32,8 @@ class OAuthPageState extends State<OAuthPage> {
         ],
       ),
       builder: ((context, snapshot) {
+        print("BUILDING OAUTHPAGE");
+        print(snapshot.data?[0]);
         if (snapshot.hasData && !(snapshot.data![0] as bool)) {
           var theme = LenraTheme.of(context);
           bool isMobileDevice = MediaQuery.of(context).size.width <= 875;
@@ -145,17 +148,35 @@ class OAuthPageState extends State<OAuthPage> {
   }
 
   static Future<bool> authenticate(BuildContext context) async {
+    print("AUTHENTICATING");
     AccessTokenResponse? response = await context.read<OAuthModel>().authenticate();
     if (response != null) {
+      print("ACCESS TOKEN IS NOT NULL");
       context.read<AuthModel>().accessToken = response;
 
       // Set the token for the global API instance
       LenraApi.instance.token = response.accessToken;
 
       if (context.read<AuthModel>().user == null) {
-        UserResponse user = await UserApi.me();
-        context.read<AuthModel>().user = user.user;
+        print("USER IS NULL");
+        try {
+          UserResponse user = await UserApi.me();
+          if (user.user == null) {
+            print("USER IS NULL FROM API");
+            return false;
+          }
+          context.read<AuthModel>().user = user.user;
+        } on ApiError catch (e) {
+          if (e.reason == 'invalid_token') {
+            print("GOT 403 FROM SERVER FOR USER");
+            // Delete access token from storage
+            await context.read<OAuthModel>().helper.removeAllTokens();
+            return false;
+          }
+        }
       }
+
+      print("GOT TO THE RETURN TRUE ????");
 
       return true;
     }
