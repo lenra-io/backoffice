@@ -155,8 +155,8 @@ class OAuthPageState extends State<OAuthPage> {
 
       if (context.read<AuthModel>().user == null) {
         try {
-          UserResponse user = await UserApi.me();
-          context.read<AuthModel>().user = user.user;
+          UserResponse resp = await UserApi.me();
+          context.read<AuthModel>().user = resp.user;
         } on ApiError catch (e) {
           if (e.reason == 'invalid_token') {
             // Delete access token from storage
