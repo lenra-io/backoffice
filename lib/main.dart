@@ -5,7 +5,6 @@ import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_backoffice/navigation/url_strategy/url_strategy.dart' show setUrlStrategyTo;
 import 'package:client_common/api/response_models/api_error.dart';
 import 'package:client_common/config/config.dart';
-import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/models/build_model.dart';
 import 'package:client_common/models/deployment_model.dart';
 import 'package:client_common/models/store_model.dart';
@@ -133,7 +132,6 @@ class Backoffice extends StatelessWidget {
                 scopes: ['profile', 'store', 'manage:account', 'manage:apps'],
               ),
             ),
-            ChangeNotifierProvider<AuthModel>(create: (context) => AuthModel()),
             ChangeNotifierProvider<BuildModel>(create: (context) => BuildModel()),
             ChangeNotifierProvider<DeploymentModel>(create: (context) => DeploymentModel()),
             ChangeNotifierProvider<UserApplicationModel>(create: (context) => UserApplicationModel()),

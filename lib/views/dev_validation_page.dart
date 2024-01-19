@@ -1,7 +1,7 @@
 import 'package:client_backoffice/navigation/backoffice_navigator.dart';
 import 'package:client_common/api/response_models/api_error.dart';
-import 'package:client_common/models/auth_model.dart';
 import 'package:client_common/navigator/common_navigator.dart';
+import 'package:client_common/oauth/oauth_model.dart';
 import 'package:client_common/views/error.dart';
 import 'package:client_common/views/simple_page.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +24,9 @@ class _DevValidationPageState extends State<DevValidationPage> {
 
   @override
   Widget build(BuildContext context) {
-    ApiError? validateDevError = context.select<AuthModel, ApiError?>((m) => m.validateDevStatus.error);
-    bool hasError = context.select<AuthModel, bool>((m) => m.validateDevStatus.hasError());
-    bool isLoading = context.select<AuthModel, bool>((m) => m.validateDevStatus.isFetching());
+    ApiError? validateDevError = context.select<OAuthModel, ApiError?>((m) => m.validateDevStatus.error);
+    bool hasError = context.select<OAuthModel, bool>((m) => m.validateDevStatus.hasError());
+    bool isLoading = context.select<OAuthModel, bool>((m) => m.validateDevStatus.isFetching());
 
     return SimplePage(
       title: "Thank you for your registration",
@@ -75,7 +75,7 @@ class _DevValidationPageState extends State<DevValidationPage> {
   }
 
   void validateDev() {
-    context.read<AuthModel>().validateDev().then((_) {
+    context.read<OAuthModel>().validateDev().then((_) {
       CommonNavigator.go(context, BackofficeNavigator.welcome);
     });
   }
