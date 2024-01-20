@@ -1,6 +1,8 @@
 import 'package:client_backoffice/api/backoffice_api.dart';
+import 'package:client_backoffice/api/request_models/create_environment_secret_request.dart';
 import 'package:client_backoffice/api/response_models/environment_secret_response.dart';
 import 'package:client_backoffice/api/response_models/environment_secrets_response.dart';
+import 'package:client_common/api/response_models/get_main_env_response.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_button.dart';
@@ -20,6 +22,8 @@ class SecretsPage extends StatefulWidget {
 }
 
 class _SecretsPageState extends State<SecretsPage> {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final lenraTextThemeData = LenraTheme.of(context).lenraTextThemeData;
@@ -30,11 +34,26 @@ class _SecretsPageState extends State<SecretsPage> {
       children: [
         LenraText(text: "Secrets", style: lenraTextThemeData.headline3),
         LenraText(text: "Create secrets for your application."),
+        Flex(
+          direction: Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Secrets", style: lenraTextThemeData.headline3),
+            LenraButton(
+              onPressed: () {
+                showEditDialog(null);
+              },
+              text: "New secret",
+            )
+          ],
+        ),
+        Divider(),
         FutureBuilder<EnvironmentSecretsResponse>(
           future: Future.wait([
             context.read<UserApplicationModel>().getMainEnv(widget.appId),
           ]).then(
-            (env) => BackofficeApi.getEnvironmentSecrets(widget.appId, env[0].mainEnv.id),
+            (envResponse) => BackofficeApi.getEnvironmentSecrets(widget.appId, envResponse[0].mainEnv.id),
           ),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
@@ -55,12 +74,12 @@ class _SecretsPageState extends State<SecretsPage> {
                 ),
                 DataColumn(
                   label: Expanded(
-                    child: LenraButton(
-                      onPressed: () {
-                        showEditDialog(null);
-                      },
-                      text: "Add new secret",
-                    ),
+                    child: Text('Value', style: lenraTextThemeData.headlineBody),
+                  ),
+                ),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(''),
                   ),
                 ),
               ],
@@ -71,6 +90,10 @@ class _SecretsPageState extends State<SecretsPage> {
                   return DataRow(cells: <DataCell>[
                     DataCell(
                       Text(secret.key),
+                    ),
+                    // TODO: How to handle obfuscated value ? Does the server return null ?
+                    DataCell(
+                      Text(secret.value),
                     ),
                     DataCell(Flex(
                       direction: Axis.horizontal,
@@ -83,7 +106,13 @@ class _SecretsPageState extends State<SecretsPage> {
                         ),
                         IconButton(
                           onPressed: () async {
-                            await deleteSecret(secret.id);
+                            GetMainEnvResponse mainEnvResponse =
+                                await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+                            await BackofficeApi.deleteEnvironmentSecret(
+                              widget.appId,
+                              mainEnvResponse.mainEnv.id,
+                              secret.id,
+                            );
                             setState(() {});
                           },
                           icon: Icon(Icons.delete),
@@ -102,27 +131,33 @@ class _SecretsPageState extends State<SecretsPage> {
   }
 
   void showEditDialog(EnvironmentSecretResponse? secret) {
+    final nameController = TextEditingController(text: secret?.key);
+    final valueController = TextEditingController(text: secret?.value);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Edit secret"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Name",
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                  ),
+                  controller: nameController,
                 ),
-                controller: TextEditingController(text: secret?.key),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: "Value",
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Value",
+                  ),
+                  controller: valueController,
                 ),
-                controller: TextEditingController(text: secret?.value),
-              ),
-            ],
+              ],
+            ),
           ),
           actions: [
             LenraButton(
@@ -134,35 +169,37 @@ class _SecretsPageState extends State<SecretsPage> {
             ),
             LenraButton(
               onPressed: () async {
-                // if (formKey.currentState!.validate()) {
-                //   GetMainEnvResponse res = await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+                if (formKey.currentState!.validate()) {
+                  GetMainEnvResponse mainEnvResponse =
+                      await context.read<UserApplicationModel>().getMainEnv(widget.appId);
 
-                //   if (client == null) {
-                //     await LenraApi.instance.post(
-                //       '/environments/${res.mainEnv.id}/oauth2',
-                //       body: {
-                //         'name': nameController.text,
-                //         'scopes': ['app:websocket'],
-                //         'redirect_uris': redirectUrisController.text.split('\n').map((e) => e.trim()).toList(),
-                //         'allowed_origins': allowedOriginsController.text.split('\n').map((e) => e.trim()).toList(),
-                //       },
-                //     );
-                //   } else {
-                //     await LenraApi.instance.put(
-                //       '/environments/${res.mainEnv.id}/oauth2/${client.clientId}',
-                //       body: {
-                //         'name': nameController.text,
-                //         'scopes': ['app:websocket'],
-                //         'redirect_uris': redirectUrisController.text.split('\n'),
-                //         'allowed_origins': allowedOriginsController.text.split('\n')
-                //       },
-                //     );
-                //   }
+                  if (secret == null) {
+                    await BackofficeApi.createEnvironmentSecret(
+                      widget.appId,
+                      mainEnvResponse.mainEnv.id,
+                      CreateEnvironmentSecretRequest(
+                        key: nameController.text,
+                        value: valueController.text,
+                      ),
+                    );
+                  } else {
+                    await BackofficeApi.updateEnvironmentSecret(
+                      widget.appId,
+                      mainEnvResponse.mainEnv.id,
+                      EnvironmentSecretResponse.fromJson({
+                        "id": secret.id,
+                        "key": nameController.text,
+                        "value": valueController.text,
+                        "is_obfuscated": secret.isObfuscated,
+                        "environment_id": secret.environmentId,
+                      }),
+                    );
+                  }
 
-                //   Navigator.of(context, rootNavigator: true).pop();
+                  Navigator.of(context, rootNavigator: true).pop();
 
-                //   setState(() {});
-                // }
+                  setState(() {});
+                }
               },
               text: "Save",
             ),
