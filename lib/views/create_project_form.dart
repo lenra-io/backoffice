@@ -113,8 +113,8 @@ class _CreateProjectFormState extends State<CreateProjectForm> {
       return LenraButton(
         text: "Logout",
         onPressed: () async {
-          await context.read<OAuthModel>().helper.disconnect();
-          context.go("/oauth");
+          await context.read<OAuthModel>().logout();
+          context.go("/");
         },
         type: LenraComponentType.secondary,
       );

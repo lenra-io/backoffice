@@ -68,8 +68,8 @@ class BackofficeDrawer extends StatelessWidget {
                   "Logout",
                   icon: Icons.logout,
                   onPressed: () async {
-                    await context.read<OAuthModel>().helper.disconnect();
-                    context.go("/oauth");
+                    await context.read<OAuthModel>().logout();
+                    context.go("/");
                   },
                 ),
                 BackofficeSideMenuItem(
