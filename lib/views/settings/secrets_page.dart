@@ -72,11 +72,6 @@ class _SecretsPageState extends State<SecretsPage> {
                 ),
                 DataColumn(
                   label: Expanded(
-                    child: Text('Value', style: lenraTextThemeData.headlineBody),
-                  ),
-                ),
-                DataColumn(
-                  label: Expanded(
                     child: Text(''),
                   ),
                 ),
@@ -88,10 +83,6 @@ class _SecretsPageState extends State<SecretsPage> {
                   return DataRow(cells: <DataCell>[
                     DataCell(
                       Text(secretKey),
-                    ),
-                    // TODO: How to handle obfuscated value ? Does the server return null ?
-                    DataCell(
-                      Text("????????????"),
                     ),
                     DataCell(Flex(
                       direction: Axis.horizontal,
