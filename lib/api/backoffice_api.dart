@@ -14,7 +14,7 @@ class BackofficeApi {
   ) =>
       LenraApi.instance.post(
         "/apps/$appId/environments/$envId/secrets",
-        body: envSecret,
+        body: envSecret.toJson(),
         responseMapper: (json, header) => json,
       );
 
@@ -25,7 +25,7 @@ class BackofficeApi {
   ) =>
       LenraApi.instance.put(
         "/apps/$appId/environments/$envId/secrets/${envSecret.key}",
-        body: envSecret,
+        body: {'value': envSecret.value},
         responseMapper: (json, header) => json,
       );
 
