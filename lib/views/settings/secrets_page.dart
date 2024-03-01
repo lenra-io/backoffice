@@ -1,7 +1,5 @@
 import 'package:client_backoffice/api/backoffice_api.dart';
 import 'package:client_backoffice/api/request_models/create_environment_secret_request.dart';
-import 'package:client_backoffice/api/response_models/environment_secret_response.dart';
-import 'package:client_backoffice/api/response_models/environment_secrets_response.dart';
 import 'package:client_common/api/response_models/get_main_env_response.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +47,7 @@ class _SecretsPageState extends State<SecretsPage> {
           ],
         ),
         Divider(),
-        FutureBuilder<EnvironmentSecretsResponse>(
+        FutureBuilder<List<String>>(
           future: Future.wait([
             context.read<UserApplicationModel>().getMainEnv(widget.appId),
           ]).then(
@@ -60,7 +58,7 @@ class _SecretsPageState extends State<SecretsPage> {
               return CircularProgressIndicator();
             }
 
-            List<EnvironmentSecretResponse> secrets = snapshot.data!.secrets;
+            List<String> secrets = snapshot.data!;
 
             return DataTable(
               showCheckboxColumn: false,
@@ -86,14 +84,14 @@ class _SecretsPageState extends State<SecretsPage> {
               rows: List<DataRow>.generate(
                 secrets.length,
                 (index) {
-                  EnvironmentSecretResponse secret = secrets[index];
+                  String secretKey = secrets[index];
                   return DataRow(cells: <DataCell>[
                     DataCell(
-                      Text(secret.key),
+                      Text(secretKey),
                     ),
                     // TODO: How to handle obfuscated value ? Does the server return null ?
                     DataCell(
-                      Text(secret.value),
+                      Text("????????????"),
                     ),
                     DataCell(Flex(
                       direction: Axis.horizontal,
@@ -101,7 +99,7 @@ class _SecretsPageState extends State<SecretsPage> {
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            showEditDialog(secret);
+                            showEditDialog(secretKey);
                           },
                         ),
                         IconButton(
@@ -111,7 +109,7 @@ class _SecretsPageState extends State<SecretsPage> {
                             await BackofficeApi.deleteEnvironmentSecret(
                               widget.appId,
                               mainEnvResponse.mainEnv.id,
-                              secret.id,
+                              secretKey,
                             );
                             setState(() {});
                           },
@@ -130,9 +128,9 @@ class _SecretsPageState extends State<SecretsPage> {
     );
   }
 
-  void showEditDialog(EnvironmentSecretResponse? secret) {
-    final nameController = TextEditingController(text: secret?.key);
-    final valueController = TextEditingController(text: secret?.value);
+  void showEditDialog(String? secretKey) {
+    final nameController = TextEditingController(text: secretKey);
+    final valueController = TextEditingController(text: "");
 
     showDialog(
       context: context,
@@ -173,7 +171,7 @@ class _SecretsPageState extends State<SecretsPage> {
                   GetMainEnvResponse mainEnvResponse =
                       await context.read<UserApplicationModel>().getMainEnv(widget.appId);
 
-                  if (secret == null) {
+                  if (secretKey == null) {
                     await BackofficeApi.createEnvironmentSecret(
                       widget.appId,
                       mainEnvResponse.mainEnv.id,
@@ -186,13 +184,10 @@ class _SecretsPageState extends State<SecretsPage> {
                     await BackofficeApi.updateEnvironmentSecret(
                       widget.appId,
                       mainEnvResponse.mainEnv.id,
-                      EnvironmentSecretResponse.fromJson({
-                        "id": secret.id,
-                        "key": nameController.text,
-                        "value": valueController.text,
-                        "is_obfuscated": secret.isObfuscated,
-                        "environment_id": secret.environmentId,
-                      }),
+                      EnvironmentSecret(
+                        key: nameController.text,
+                        value: valueController.text,
+                      ),
                     );
                   }
 
