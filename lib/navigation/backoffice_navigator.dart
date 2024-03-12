@@ -8,6 +8,7 @@ import 'package:client_backoffice/views/select_project_page.dart';
 import 'package:client_backoffice/views/settings/external_clients_page.dart';
 import 'package:client_backoffice/views/settings/git_integration_page.dart';
 import 'package:client_backoffice/views/settings/manage_access_page.dart';
+import 'package:client_backoffice/views/settings/secrets_page.dart';
 import 'package:client_backoffice/views/settings_page.dart';
 import 'package:client_backoffice/views/subscription_page.dart';
 import 'package:client_backoffice/views/welcome_dev_page.dart';
@@ -111,6 +112,19 @@ class BackofficeNavigator extends CommonNavigator {
     },
   );
 
+  static GoRoute secretsSettings = GoRoute(
+    name: "secrets-settings",
+    path: "settings/secrets",
+    pageBuilder: (context, state) {
+      return NoTransitionPage(
+        key: state.pageKey,
+        child: SecretsPage(
+          appId: int.tryParse(state.params["appId"]!)!,
+        ),
+      );
+    },
+  );
+
   static ShellRoute settings = ShellRoute(
     pageBuilder: (context, state, child) {
       return NoTransitionPage(
@@ -125,6 +139,7 @@ class BackofficeNavigator extends CommonNavigator {
       gitSettings,
       accessSettings,
       oauthSettings,
+      secretsSettings,
     ],
   );
 

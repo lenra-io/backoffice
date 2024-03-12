@@ -48,6 +48,11 @@ class SettingsPage extends StatelessWidget {
                 context,
                 "External clients",
                 BackofficeNavigator.oauthSettings,
+              ),
+              createSubMenuItem(
+                context,
+                "Secrets",
+                BackofficeNavigator.secretsSettings,
               )
             ],
           ),
