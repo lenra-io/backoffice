@@ -35,18 +35,22 @@ class _OverviewPageState extends State<OverviewPage> {
 
     UserApplicationModel userApplicationModel = context.read<UserApplicationModel>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      userApplicationModel.fetchUserApplications().then(
-        (_) {
-          setState(() {
-            app = userApplicationModel.getApp(widget.appId);
-          });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await userApplicationModel.fetchUserApplications().then(
+        (_) async {
+          AppResponse? app = userApplicationModel.getApp(widget.appId);
 
           if (app == null) {
             CommonNavigator.go(context, BackofficeNavigator.selectProject);
           } else {
-            buildModel.fetchBuilds(widget.appId);
-            deploymentModel.fetchDeployments(widget.appId);
+            await Future.wait([
+              buildModel.fetchBuilds(widget.appId),
+              deploymentModel.fetchDeployments(widget.appId),
+            ]);
+
+            setState(() {
+              this.app = app;
+            });
           }
         },
       );
