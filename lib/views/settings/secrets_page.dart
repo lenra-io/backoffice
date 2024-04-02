@@ -1,6 +1,8 @@
 import 'package:client_backoffice/api/backoffice_api.dart';
 import 'package:client_backoffice/api/request_models/create_environment_secret_request.dart';
+import 'package:client_common/api/response_models/api_error.dart';
 import 'package:client_common/api/response_models/get_main_env_response.dart';
+import 'package:client_common/lenra_application/api_error_snack_bar.dart';
 import 'package:client_common/models/user_application_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lenra_components/component/lenra_button.dart';
@@ -8,6 +10,7 @@ import 'package:lenra_components/component/lenra_text.dart';
 import 'package:lenra_components/layout/lenra_flex.dart';
 import 'package:lenra_components/theme/lenra_theme.dart';
 import 'package:lenra_components/theme/lenra_theme_data.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 class SecretsPage extends StatefulWidget {
@@ -22,6 +25,8 @@ class SecretsPage extends StatefulWidget {
 class _SecretsPageState extends State<SecretsPage> {
   final formKey = GlobalKey<FormState>();
 
+  final logger = Logger("AppSecretsPage");
+
   @override
   Widget build(BuildContext context) {
     final lenraTextThemeData = LenraTheme.of(context).lenraTextThemeData;
@@ -30,7 +35,7 @@ class _SecretsPageState extends State<SecretsPage> {
       spacing: 16,
       direction: Axis.vertical,
       children: [
-        LenraText(text: "Secrets", style: lenraTextThemeData.headline3),
+        LenraText(text: "Application secrets", style: lenraTextThemeData.headline3),
         LenraText(text: "Create secrets for your application."),
         Flex(
           direction: Axis.horizontal,
@@ -42,7 +47,7 @@ class _SecretsPageState extends State<SecretsPage> {
               onPressed: () {
                 showEditDialog(null);
               },
-              text: "New secret",
+              text: "New",
             )
           ],
         ),
@@ -58,7 +63,15 @@ class _SecretsPageState extends State<SecretsPage> {
               return CircularProgressIndicator();
             }
 
-            List<String> secrets = snapshot.data!;
+            if (snapshot.hasError) {
+              var snackbar =
+                  ApiErrorSnackBar(error: snapshot.error as ApiError, onPressAction: () {}, actionLabel: 'Ok');
+              WidgetsBinding.instance.addPostFrameCallback((_) => ScaffoldMessenger.of(context).showSnackBar(snackbar));
+              logger.warning(snapshot.error);
+              logger.warning(snapshot.stackTrace);
+            }
+
+            List<String> secrets = snapshot.data ?? [];
 
             return DataTable(
               showCheckboxColumn: false,
@@ -76,42 +89,46 @@ class _SecretsPageState extends State<SecretsPage> {
                   ),
                 ),
               ],
-              rows: List<DataRow>.generate(
-                secrets.length,
-                (index) {
-                  String secretKey = secrets[index];
-                  return DataRow(cells: <DataCell>[
-                    DataCell(
-                      Text(secretKey),
+              rows: secrets.isEmpty
+                  ? [
+                      DataRow(cells: [DataCell(Text("No secrets")), DataCell(Container())])
+                    ]
+                  : List<DataRow>.generate(
+                      secrets.length,
+                      (index) {
+                        String secretKey = secrets[index];
+                        return DataRow(cells: <DataCell>[
+                          DataCell(
+                            Text(secretKey),
+                          ),
+                          DataCell(Flex(
+                            direction: Axis.horizontal,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {
+                                  showEditDialog(secretKey);
+                                },
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  GetMainEnvResponse mainEnvResponse =
+                                      await context.read<UserApplicationModel>().getMainEnv(widget.appId);
+                                  await BackofficeApi.deleteEnvironmentSecret(
+                                    widget.appId,
+                                    mainEnvResponse.mainEnv.id,
+                                    secretKey,
+                                  );
+                                  setState(() {});
+                                },
+                                icon: Icon(Icons.delete),
+                                color: Colors.red,
+                              ),
+                            ],
+                          )),
+                        ]);
+                      },
                     ),
-                    DataCell(Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            showEditDialog(secretKey);
-                          },
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            GetMainEnvResponse mainEnvResponse =
-                                await context.read<UserApplicationModel>().getMainEnv(widget.appId);
-                            await BackofficeApi.deleteEnvironmentSecret(
-                              widget.appId,
-                              mainEnvResponse.mainEnv.id,
-                              secretKey,
-                            );
-                            setState(() {});
-                          },
-                          icon: Icon(Icons.delete),
-                          color: Colors.red,
-                        ),
-                      ],
-                    )),
-                  ]);
-                },
-              ),
             );
           },
         ),
@@ -162,24 +179,31 @@ class _SecretsPageState extends State<SecretsPage> {
                   GetMainEnvResponse mainEnvResponse =
                       await context.read<UserApplicationModel>().getMainEnv(widget.appId);
 
-                  if (secretKey == null) {
-                    await BackofficeApi.createEnvironmentSecret(
-                      widget.appId,
-                      mainEnvResponse.mainEnv.id,
-                      CreateEnvironmentSecretRequest(
-                        key: nameController.text,
-                        value: valueController.text,
-                      ),
-                    );
-                  } else {
-                    await BackofficeApi.updateEnvironmentSecret(
-                      widget.appId,
-                      mainEnvResponse.mainEnv.id,
-                      EnvironmentSecret(
-                        key: nameController.text,
-                        value: valueController.text,
-                      ),
-                    );
+                  try {
+                    if (secretKey == null) {
+                      await BackofficeApi.createEnvironmentSecret(
+                        widget.appId,
+                        mainEnvResponse.mainEnv.id,
+                        CreateEnvironmentSecretRequest(
+                          key: nameController.text,
+                          value: valueController.text,
+                        ),
+                      );
+                    } else {
+                      await BackofficeApi.updateEnvironmentSecret(
+                        widget.appId,
+                        mainEnvResponse.mainEnv.id,
+                        EnvironmentSecret(
+                          key: nameController.text,
+                          value: valueController.text,
+                        ),
+                      );
+                    }
+                  } on ApiError catch (error) {
+                    var snackbar = ApiErrorSnackBar(error: error, onPressAction: () {}, actionLabel: 'Ok');
+                    WidgetsBinding.instance
+                        .addPostFrameCallback((_) => ScaffoldMessenger.of(context).showSnackBar(snackbar));
+                    logger.warning(error);
                   }
 
                   Navigator.of(context, rootNavigator: true).pop();
