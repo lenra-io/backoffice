@@ -129,7 +129,7 @@ class _ExternalClientsPageState extends State<ExternalClientsPage> {
 
         print(snapshot.error);
 
-        return CircularProgressIndicator();
+        return Column(children: [CircularProgressIndicator()]);
       },
     );
   }

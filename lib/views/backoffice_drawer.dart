@@ -20,6 +20,7 @@ class BackofficeDrawer extends StatelessWidget {
     var theme = LenraTheme.of(context);
     return Drawer(
       width: 196,
+      shape: Border(),
       child: Container(
         color: LenraColorThemeData.lenraBlack,
         child: LenraTheme(
